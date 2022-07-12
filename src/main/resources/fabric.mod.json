@@ -20,6 +20,9 @@
     ],
     "client": [
       "xyz.bluspring.lifelinedeathhandler.client.LifelineDeathHandlerClient"
+    ],
+    "modmenu": [
+      "xyz.bluspring.lifelinedeathhandler.client.gui.LifelineModMenuIntegration"
     ]
   },
   "mixins": [

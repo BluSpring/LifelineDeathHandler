@@ -16,10 +16,8 @@ class LifelineDeathHandlerClient : ClientModInitializer {
     private val logger: Logger = LoggerFactory.getLogger(LifelineDeathHandlerClient::class.java)
 
     override fun onInitializeClient() {
-        val configFile = File(FabricLoader.getInstance().configDir.toFile(), "lifeline_client_config.yml")
-
-        try {
-            config = Yaml.default.decodeFromString(LifelineClientConfig.serializer(), configFile.readText())
+        config = try {
+            Yaml.default.decodeFromString(LifelineClientConfig.serializer(), configFile.readText())
         } catch (e: Exception) {
             logger.error("Failed to read config! Creating new file...")
             e.printStackTrace()
@@ -29,7 +27,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
 
             val configText = LifelineDeathHandlerClient::class.java.classLoader.getResource("client_config.yml")!!.readText()
             configFile.writeText(configText)
-            config = Yaml.default.decodeFromString(LifelineClientConfig.serializer(), configText)
+            Yaml.default.decodeFromString(LifelineClientConfig.serializer(), configText)
         }
     }
 
@@ -37,5 +35,6 @@ class LifelineDeathHandlerClient : ClientModInitializer {
         lateinit var config: LifelineClientConfig
 
         var isEnabled = false
+        val configFile = File(FabricLoader.getInstance().configDir.toFile(), "lifeline_client_config.yml")
     }
 }
