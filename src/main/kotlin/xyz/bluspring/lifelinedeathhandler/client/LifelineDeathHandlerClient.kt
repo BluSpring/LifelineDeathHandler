@@ -27,13 +27,15 @@ class LifelineDeathHandlerClient : ClientModInitializer {
             if (!configFile.exists())
                 configFile.createNewFile()
 
-            configFile.writeText(LifelineDeathHandlerClient::class.java.classLoader.getResource("client_config.yml")!!.readText())
+            val configText = LifelineDeathHandlerClient::class.java.classLoader.getResource("client_config.yml")!!.readText()
+            configFile.writeText(configText)
+            config = Yaml.default.decodeFromString(LifelineClientConfig.serializer(), configText)
         }
     }
 
     companion object {
         lateinit var config: LifelineClientConfig
 
-        var isEnabled = false
+        var isEnabled = true
     }
 }
