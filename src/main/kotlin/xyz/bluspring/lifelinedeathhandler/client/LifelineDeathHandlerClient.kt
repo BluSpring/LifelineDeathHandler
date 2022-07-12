@@ -36,6 +36,6 @@ class LifelineDeathHandlerClient : ClientModInitializer {
     companion object {
         lateinit var config: LifelineClientConfig
 
-        var isEnabled = true
+        var isEnabled = false
     }
 }
