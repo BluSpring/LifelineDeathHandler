@@ -3,7 +3,7 @@
 # Go off ig?
 
 # The stream notification system used for the streamer.
-# Accepted values: NONE, STREAMLABS, STREAMELEMENTS
-type: NONE
+# Accepted values: STREAMLABS, STREAMELEMENTS
+type: STREAMLABS
 # The API key for the stream notification system.
 api-key: ""

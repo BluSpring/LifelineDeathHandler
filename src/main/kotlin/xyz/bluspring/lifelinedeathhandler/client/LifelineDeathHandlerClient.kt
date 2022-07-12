@@ -2,7 +2,11 @@ package xyz.bluspring.lifelinedeathhandler.client
 
 import com.charleskorn.kaml.Yaml
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
+import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.network.ClientPlayNetworkHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.bluspring.lifelinedeathhandler.client.config.LifelineClientConfig
@@ -29,5 +33,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
 
     companion object {
         lateinit var config: LifelineClientConfig
+
+        var isEnabled = false
     }
 }

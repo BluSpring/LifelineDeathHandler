@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 
 @kotlinx.serialization.Serializable
 data class LifelineClientConfig(
-    var type: StreamNotificationType = StreamNotificationType.NONE,
+    var type: StreamNotificationType,
     @SerialName("api-key")
     var apiKey: String = ""
 )
