@@ -10,7 +10,7 @@
   "contact": {},
   "license": "MIT",
   "icon": "assets/LifelineDeathHandler/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "xyz.bluspring.lifelinedeathhandler.LifelineDeathHandler"
