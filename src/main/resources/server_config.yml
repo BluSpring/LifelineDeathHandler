@@ -1,0 +1,57 @@
+# The LifelineSMP's managing mod's config, for the server.
+# It's better to modify these via commands, as it will be updated entirely in real-time.
+
+default-lives: 50
+max-group-size: 4
+
+# EXCEPT FOR THIS,
+# THIS SHOULD BE EDITED IN CONFIG.
+viewer-assistance:
+  twitch-subscription-gift:
+    enabled: true
+    types:
+      - type: LIFE_ADD_EVERY
+        tiers:
+          - TIER_1
+          - TIER_2
+          - TIER_3
+          - TIER_PRIME
+        data:
+          per: 5
+          add: 1
+  twitch-cheer:
+    enabled: true
+    types:
+      - type: LIFE_ADD_EVERY
+        data:
+          per: 2500
+          add: 1
+  twitch-subscription:
+    enabled: true
+    types:
+      - tiers:
+          - TIER_1
+          - TIER_2
+          - TIER_3
+          - TIER_PRIME
+        type: ITEM_GIVE
+        data:
+          per: 1
+          id: minecraft:diamond
+          count: 1
+          nbt: '{"display":{"Name":"\\"%display_name%\\""}}'
+  donation:
+    enabled: false
+    types: []
+  twitch-follow:
+    enabled: false
+    types: []
+  twitch-point-redemption: # Disabled.
+    enabled: false
+    types: []
+  twitch-raid:
+    enabled: false
+    types: []
+  twitch-host:
+    enabled: false
+    types: []

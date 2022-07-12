@@ -1,0 +1,9 @@
+# The LifelineSMP's managing mod's config, for the client.
+# Typically, you would want to edit this in ModMenu, but if you want to just edit it here...
+# Go off ig?
+
+# The stream notification system used for the streamer.
+# Accepted values: NONE, STREAMLABS, STREAMELEMENTS
+type: NONE
+# The API key for the stream notification system.
+api-key: ""

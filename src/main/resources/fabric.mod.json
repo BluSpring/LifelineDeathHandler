@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "lifelinedeathhandler",
+  "version": "${version}",
+  "name": "LifelineDeathHandler",
+  "description": "",
+  "authors": [
+    "BluSpring"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/LifelineDeathHandler/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "xyz.bluspring.lifelinedeathhandler.LifelineDeathHandler"
+    ],
+    "server": [
+      "xyz.bluspring.lifelinedeathhandler.server.LifelineDeathHandlerServer"
+    ],
+    "client": [
+      "xyz.bluspring.lifelinedeathhandler.client.LifelineDeathHandlerClient"
+    ]
+  },
+  "mixins": [
+    "LifelineDeathHandler.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.8",
+    "fabric": "*",
+    "minecraft": "1.19",
+    "fabric-language-kotlin": ">=1.8.1+kotlin.1.7.0",
+    "cloth-config": ">=7.0.73"
+  }
+}
