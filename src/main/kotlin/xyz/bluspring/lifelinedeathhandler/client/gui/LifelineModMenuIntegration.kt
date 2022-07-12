@@ -57,6 +57,8 @@ class LifelineModMenuIntegration : ModMenuApi {
 
                                 setSaveConsumer {
                                     config.apiKey = it
+
+                                    LifelineDeathHandlerClient.sendApiKey()
                                 }
                             }.build()
                         )
