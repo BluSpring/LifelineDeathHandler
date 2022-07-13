@@ -10,11 +10,15 @@ import dev.lambdaurora.spruceui.widget.container.SpruceContainerWidget
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.text.Style
 import net.minecraft.text.Text
+import net.minecraft.text.TextColor
+import net.minecraft.util.Identifier
 import xyz.bluspring.lifelinedeathhandler.client.LifelineDeathHandlerClient
 import xyz.bluspring.lifelinedeathhandler.client.gui.spruceui.SpruceImageTextureWidget
 import xyz.bluspring.lifelinedeathhandler.client.gui.spruceui.SpruceImageTextureWithTooltipWidget
 import xyz.bluspring.lifelinedeathhandler.client.gui.spruceui.SpruceScrollableContainerWidget
+import xyz.bluspring.lifelinedeathhandler.team.LifelineTeam
 
 
 class TeamLivesScreen(private val parent: Screen? = null) : SpruceScreen(Text.of("LifelineSMP Teams")) {
@@ -47,27 +51,32 @@ class TeamLivesScreen(private val parent: Screen? = null) : SpruceScreen(Text.of
                                         8, 8, 4, lifelinePlayer.getSkinTexture()
                                     )
                                 )*/
+
+                                val faceX = width / 2 - 12 + ((12 * client.window.scaleFactor.toInt()) * index)
+                                val size = 8 * client.window.scaleFactor.toInt()
+
+                                // This is the face layer
                                 addChild(
-                                    SpruceImageTextureWithTooltipWidget(
-                                        Position.of(width / 2 - 12 + (20 * index), height / 2),
-                                        16, 16,
+                                    SpruceImageTextureWidget(
+                                        Position.of(faceX, height / 2),
+                                        size, size,
                                         lifelinePlayer.getSkinTexture()!!,
                                         (8 * client.window.scaleFactor).toFloat(), (8 * client.window.scaleFactor).toFloat(),
                                         (8 * client.window.scaleFactor).toInt(), (8 * client.window.scaleFactor).toInt(),
-                                        (64 * client.window.scaleFactor).toInt(), (64 * client.window.scaleFactor).toInt(),
-                                        Text.of(lifelinePlayer.name)
+                                        (64 * client.window.scaleFactor).toInt(), (64 * client.window.scaleFactor).toInt()
                                     )
                                 )
 
                                 // This is the hat layer
                                 addChild(
-                                    SpruceImageTextureWidget(
-                                        Position.of(width / 2 - 12 + (20 * index), height / 2),
-                                        16, 16,
+                                    SpruceImageTextureWithTooltipWidget(
+                                        Position.of(faceX, height / 2),
+                                        size, size,
                                         lifelinePlayer.getSkinTexture()!!,
                                         (40 * client.window.scaleFactor).toFloat(), (8 * client.window.scaleFactor).toFloat(),
                                         (8 * client.window.scaleFactor).toInt(), (8 * client.window.scaleFactor).toInt(),
-                                        (64 * client.window.scaleFactor).toInt(), (64 * client.window.scaleFactor).toInt()
+                                        (64 * client.window.scaleFactor).toInt(), (64 * client.window.scaleFactor).toInt(),
+                                        Text.of(lifelinePlayer.name)
                                     )
                                 )
 
@@ -80,6 +89,32 @@ class TeamLivesScreen(private val parent: Screen? = null) : SpruceScreen(Text.of
                                     )
                                 )*/
                             }
+
+                            val posX = 72
+
+                            val heartSize = 9
+                            val heartU = 52F
+                            val heartV = 0F
+                            val heartScale = (2 * client.window.scaleFactor).toInt()
+
+                            addChild(
+                                SpruceImageTextureWidget(
+                                    Position.of(width - posX, height / 4),
+                                    heartSize * heartScale, heartSize * heartScale,
+                                    Identifier("minecraft", "textures/gui/icons.png"),
+                                    heartU * heartScale, heartV * heartScale,
+                                    heartSize * heartScale, heartSize * heartScale,
+                                    256 * heartScale, 256 * heartScale
+                                )
+                            )
+
+                            addChild(
+                                SpruceLabelWidget(
+                                    Position.of(width - posX + 4 + (heartSize * heartScale), height / 2),
+                                    Text.of("x ${it.value.lives}").copy().setStyle(Style.EMPTY.withColor(LifelineTeam.getColorFromLives(it.value.lives))),
+                                    client.textRenderer.getWidth(Text.of("x ${it.value.lives}"))
+                                )
+                            )
                         }
                     )
 

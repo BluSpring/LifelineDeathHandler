@@ -105,7 +105,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
             )
 
             teams["test3"] = LifelineTeam(
-                7, Text.of("Experimental Team 3"),
+                39, Text.of("Experimental Team 3"),
                 mutableListOf(
                     LifelinePlayer("FuriousSyndrome", UUID.fromString("536c4f64-ca63-40cc-bef8-45f49a1609af")),
                     LifelinePlayer("princetobi", UUID.fromString("89794f04-0ef0-4fee-a46a-07ea419281af")),
@@ -115,7 +115,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
             )
 
             teams["test4"] = LifelineTeam(
-                7, Text.of("Experimental Team 4"),
+                16, Text.of("Experimental Team 4"),
                 mutableListOf(
                     LifelinePlayer("FuriousSyndrome", UUID.fromString("536c4f64-ca63-40cc-bef8-45f49a1609af")),
                     LifelinePlayer("princetobi", UUID.fromString("89794f04-0ef0-4fee-a46a-07ea419281af")),
@@ -125,7 +125,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
             )
 
             teams["test5"] = LifelineTeam(
-                7, Text.of("Experimental Team 5"),
+                24, Text.of("Experimental Team 5"),
                 mutableListOf(
                     LifelinePlayer("FuriousSyndrome", UUID.fromString("536c4f64-ca63-40cc-bef8-45f49a1609af")),
                     LifelinePlayer("princetobi", UUID.fromString("89794f04-0ef0-4fee-a46a-07ea419281af")),
@@ -135,7 +135,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
             )
 
             teams["test6"] = LifelineTeam(
-                7, Text.of("Experimental Team 6"),
+                32, Text.of("Experimental Team 6"),
                 mutableListOf(
                     LifelinePlayer("FuriousSyndrome", UUID.fromString("536c4f64-ca63-40cc-bef8-45f49a1609af")),
                     LifelinePlayer("princetobi", UUID.fromString("89794f04-0ef0-4fee-a46a-07ea419281af")),
