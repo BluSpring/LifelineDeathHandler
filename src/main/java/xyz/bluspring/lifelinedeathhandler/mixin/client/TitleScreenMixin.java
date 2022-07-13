@@ -1,4 +1,4 @@
-package xyz.bluspring.lifelinedeathhandler.mixin;
+package xyz.bluspring.lifelinedeathhandler.mixin.client;
 
 import dev.lambdaurora.spruceui.Position;
 import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
