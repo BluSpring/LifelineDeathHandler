@@ -14,6 +14,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import xyz.bluspring.lifelinedeathhandler.client.LifelineDeathHandlerClient
+import xyz.bluspring.lifelinedeathhandler.client.gui.spruceui.SpruceImageTextureWithTooltipWidget
 import xyz.bluspring.lifelinedeathhandler.client.gui.spruceui.SpruceScrollableContainerWidget
 
 
@@ -29,19 +30,14 @@ class TeamLivesScreen(private val parent: Screen? = null) : SpruceScreen(Text.of
                 var y = 35
 
                 LifelineDeathHandlerClient.teams.forEach {
-                    println("this should be team ${it.key}")
-
                     addChild(
                         SpruceContainerWidget(Position.of(0, y), client.window.scaledWidth - 14 - 6, 60).apply {
-                            println("and this should be a container")
-
                             val label = SpruceLabelWidget(Position.of(width / 6, 0), it.value.name, client.textRenderer.getWidth(it.value.name) + 2)
 
                             addChild(label)
 
                             it.value.players.forEachIndexed { index, lifelinePlayer ->
-                                println("this should be player ${lifelinePlayer.name}")
-
+                                // Old way of figuring out how the texture thing worked
                                 /*addChild(
                                     SpruceTexturedButtonWidget(
                                         Position.of(label.width + (4 * (index + 1)), 10),
@@ -52,14 +48,26 @@ class TeamLivesScreen(private val parent: Screen? = null) : SpruceScreen(Text.of
                                         8, 8, 4, lifelinePlayer.getSkinTexture()
                                     )
                                 )*/
-
                                 addChild(
+                                    SpruceImageTextureWithTooltipWidget(
+                                        Position.of(width / 2 - 12 + (20 * index), height / 2),
+                                        16, 16,
+                                        lifelinePlayer.getSkinTexture()!!,
+                                        8F, 8F,
+                                        8, 8,
+                                        64, 64,
+                                        Text.of(lifelinePlayer.name)
+                                    )
+                                )
+
+                                // Username-based
+                                /*addChild(
                                     SpruceLabelWidget(
                                         Position.of(width / 2, 10 * index),
                                         Text.of(lifelinePlayer.name),
                                         client.textRenderer.getWidth(lifelinePlayer.name) + 2
                                     )
-                                )
+                                )*/
                             }
                         }
                     )

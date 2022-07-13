@@ -30,7 +30,7 @@ data class LifelinePlayer(
                 if (type == MinecraftProfileTexture.Type.SKIN) {
                     cachedSkin = id
                 }
-            }, true)
+            }, false)
 
             cachedSkin ?: DefaultSkinHelper.getTexture(uuid)
         }
