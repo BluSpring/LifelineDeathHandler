@@ -3,17 +3,16 @@ package xyz.bluspring.lifelinedeathhandler.client.gui
 import dev.lambdaurora.spruceui.Position
 import dev.lambdaurora.spruceui.SpruceTexts
 import dev.lambdaurora.spruceui.background.SimpleColorBackground
-import dev.lambdaurora.spruceui.border.SimpleBorder
 import dev.lambdaurora.spruceui.screen.SpruceScreen
 import dev.lambdaurora.spruceui.widget.SpruceButtonWidget
 import dev.lambdaurora.spruceui.widget.SpruceLabelWidget
-import dev.lambdaurora.spruceui.widget.SpruceTexturedButtonWidget
 import dev.lambdaurora.spruceui.widget.container.SpruceContainerWidget
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import xyz.bluspring.lifelinedeathhandler.client.LifelineDeathHandlerClient
+import xyz.bluspring.lifelinedeathhandler.client.gui.spruceui.SpruceImageTextureWidget
 import xyz.bluspring.lifelinedeathhandler.client.gui.spruceui.SpruceImageTextureWithTooltipWidget
 import xyz.bluspring.lifelinedeathhandler.client.gui.spruceui.SpruceScrollableContainerWidget
 
@@ -53,10 +52,22 @@ class TeamLivesScreen(private val parent: Screen? = null) : SpruceScreen(Text.of
                                         Position.of(width / 2 - 12 + (20 * index), height / 2),
                                         16, 16,
                                         lifelinePlayer.getSkinTexture()!!,
-                                        8F, 8F,
-                                        8, 8,
-                                        64, 64,
+                                        (8 * client.window.scaleFactor).toFloat(), (8 * client.window.scaleFactor).toFloat(),
+                                        (8 * client.window.scaleFactor).toInt(), (8 * client.window.scaleFactor).toInt(),
+                                        (64 * client.window.scaleFactor).toInt(), (64 * client.window.scaleFactor).toInt(),
                                         Text.of(lifelinePlayer.name)
+                                    )
+                                )
+
+                                // This is the hat layer
+                                addChild(
+                                    SpruceImageTextureWidget(
+                                        Position.of(width / 2 - 12 + (20 * index), height / 2),
+                                        16, 16,
+                                        lifelinePlayer.getSkinTexture()!!,
+                                        (40 * client.window.scaleFactor).toFloat(), (8 * client.window.scaleFactor).toFloat(),
+                                        (8 * client.window.scaleFactor).toInt(), (8 * client.window.scaleFactor).toInt(),
+                                        (64 * client.window.scaleFactor).toInt(), (64 * client.window.scaleFactor).toInt()
                                     )
                                 )
 

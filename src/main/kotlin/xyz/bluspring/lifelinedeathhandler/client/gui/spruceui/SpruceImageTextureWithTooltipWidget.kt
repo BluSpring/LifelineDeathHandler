@@ -56,7 +56,7 @@ class SpruceImageTextureWithTooltipWidget(
             buffer.end()
             tessellator.draw()*/
 
-            client.textRenderer.draw(matrices, tooltipText, x.toFloat(), y.toFloat(), 16777215)
+            client.textRenderer.drawWithShadow(matrices, tooltipText, x.toFloat(), y.toFloat(), 16777215)
         }
     }
 }
