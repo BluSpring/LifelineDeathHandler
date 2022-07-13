@@ -48,6 +48,10 @@ repositories {
         name 'Gegy'
         url 'https://maven.gegy.dev'
     }
+
+    flatDir {
+        dir 'libs'
+    }
 }
 
 dependencies {
@@ -79,7 +83,7 @@ dependencies {
     modRuntimeOnly "maven.modrinth:lithium:mc1.19-0.8.0"
     modRuntimeOnly "maven.modrinth:starlight:1.1.1+1.19"
     modRuntimeOnly "maven.modrinth:sodium:mc1.19-0.4.2"
-    modRuntimeOnly 'com.github.thecolonel63:oauth-fabric-1.19-support:1.19-SNAPSHOT' // For authentication in IntelliJ
+    modRuntimeOnly (name: 'oauth-fabric-1.0.1', ext: 'jar') // For authentication in IntelliJ
 
     // Added because otherwise Sodium physically will not function in testing.
     // I have no idea why.
