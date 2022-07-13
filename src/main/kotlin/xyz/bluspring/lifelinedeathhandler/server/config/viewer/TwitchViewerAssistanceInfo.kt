@@ -4,12 +4,10 @@ import kotlinx.serialization.SerialName
 
 @kotlinx.serialization.Serializable
 sealed class TwitchViewerAssistanceInfo {
-    @kotlinx.serialization.Serializable
-    abstract val tiers: List<TwitchSubscriptionTiers>
-
     @SerialName("LIFE_ADD_EVERY")
     @kotlinx.serialization.Serializable
     data class LifeAddEveryAssistanceData(
+        val tiers: List<TwitchSubscriptionTiers>,
         val per: Int,
         val add: Int
     )
@@ -17,6 +15,7 @@ sealed class TwitchViewerAssistanceInfo {
     @SerialName("ITEM_GIVE")
     @kotlinx.serialization.Serializable
     data class ItemGiveAssistanceData(
+        val tiers: List<TwitchSubscriptionTiers>,
         val per: Int,
         val id: String,
         val count: Int,
