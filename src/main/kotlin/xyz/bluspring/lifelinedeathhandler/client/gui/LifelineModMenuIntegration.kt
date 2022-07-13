@@ -95,7 +95,7 @@ class LifelineModMenuIntegration : ModMenuApi {
 
                         this.add(
                             integrationEntryBuilder.startTextDescription(
-                                Text.of("Streamlabs: https://streamlabs.com/dashboard#/settings/api-settings (paste the Socket API token here)").copy().setStyle(
+                                Text.of("Streamlabs: https://streamlabs.com/dashboard#/settings/api-settings (under API Tokens, paste the Socket API token here)").copy().setStyle(
                                     Style.EMPTY.withClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, "https://streamlabs.com/dashboard#/settings/api-settings")))
                             ).build()
                         )
