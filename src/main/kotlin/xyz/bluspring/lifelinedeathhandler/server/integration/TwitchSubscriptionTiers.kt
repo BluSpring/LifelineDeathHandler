@@ -1,4 +1,4 @@
-package xyz.bluspring.lifelinedeathhandler.server.config.viewer
+package xyz.bluspring.lifelinedeathhandler.server.integration
 
 enum class TwitchSubscriptionTiers {
     TIER_1,
