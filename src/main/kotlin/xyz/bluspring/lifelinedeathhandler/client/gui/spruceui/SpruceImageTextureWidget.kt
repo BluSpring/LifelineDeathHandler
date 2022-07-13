@@ -7,7 +7,7 @@ import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Identifier
 
-class SpruceImageTextureWidget(
+open class SpruceImageTextureWidget(
     widgetPosition: Position,
     widgetWidth: Int,
     widgetHeight: Int,
