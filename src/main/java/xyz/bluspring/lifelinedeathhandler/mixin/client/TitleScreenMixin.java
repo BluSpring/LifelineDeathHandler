@@ -19,7 +19,7 @@ public class TitleScreenMixin extends Screen {
 
     @Inject(at = @At("RETURN"), method = "init")
     public void onInit(CallbackInfo ci) {
-        this.addDrawableChild(new SpruceButtonWidget(Position.of(0, 12), 150, 20, Text.of("SpruceUI Test Menu"),
-                btn -> this.client.setScreen(new TeamLivesScreen(this))).asVanilla());
+        /*this.addDrawableChild(new SpruceButtonWidget(Position.of(0, 12), 150, 20, Text.of("SpruceUI Test Menu"),
+                btn -> this.client.setScreen(new TeamLivesScreen(this))).asVanilla());*/
     }
 }

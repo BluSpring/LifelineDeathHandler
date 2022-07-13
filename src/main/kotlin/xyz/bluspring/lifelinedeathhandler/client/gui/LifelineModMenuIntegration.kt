@@ -4,6 +4,8 @@ import com.charleskorn.kaml.Yaml
 import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi
 import me.shedaniel.clothconfig2.api.ConfigBuilder
+import net.minecraft.text.ClickEvent
+import net.minecraft.text.Style
 import net.minecraft.text.Text
 import xyz.bluspring.lifelinedeathhandler.client.LifelineDeathHandlerClient
 import xyz.bluspring.lifelinedeathhandler.client.config.LifelineClientConfig
@@ -76,6 +78,26 @@ class LifelineModMenuIntegration : ModMenuApi {
                                     LifelineDeathHandlerClient.sendApiKey()
                                 }
                             }.build()
+                        )
+
+                        this.add(
+                            integrationEntryBuilder.startTextDescription(
+                                Text.of("You may acquire the stream integration API keys here:")
+                            ).build()
+                        )
+
+                        this.add(
+                            integrationEntryBuilder.startTextDescription(
+                                Text.of("StreamElements: https://streamelements.com/dashboard/account/channels (under Show Secrets, paste the JWT token here)").copy().setStyle(
+                                    Style.EMPTY.withClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, "https://streamelements.com/dashboard/account/channels")))
+                            ).build()
+                        )
+
+                        this.add(
+                            integrationEntryBuilder.startTextDescription(
+                                Text.of("Streamlabs: https://streamlabs.com/dashboard#/settings/api-settings (paste the Socket API token here)").copy().setStyle(
+                                    Style.EMPTY.withClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, "https://streamlabs.com/dashboard#/settings/api-settings")))
+                            ).build()
                         )
                     }.build()
                 )
