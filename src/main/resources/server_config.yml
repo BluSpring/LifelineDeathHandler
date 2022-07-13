@@ -16,16 +16,14 @@ viewer-assistance:
           - TIER_2
           - TIER_3
           - TIER_PRIME
-        data:
-          per: 5
-          add: 1
+        per: 5
+        add: 1
   twitch-cheer:
     enabled: true
     types:
       - type: LIFE_ADD_EVERY
-        data:
-          per: 2500
-          add: 1
+        per: 2500
+        add: 1
   twitch-subscription:
     enabled: true
     types:
@@ -35,11 +33,10 @@ viewer-assistance:
           - TIER_3
           - TIER_PRIME
         type: ITEM_GIVE
-        data:
-          per: 1
-          id: minecraft:diamond
-          count: 1
-          nbt: '{"display":{"Name":"\\"%display_name%\\""}}'
+        per: 1
+        id: minecraft:diamond
+        count: 1
+        nbt: '{"display":{"Name":"\\"%display_name%\\""}}'
   donation:
     enabled: false
     types: []
