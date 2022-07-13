@@ -40,7 +40,9 @@ class LifelineDeathHandlerClient : ClientModInitializer {
             Identifier("lifelinesmp", "initialize")
         ) { _, _, _, _ ->
             isEnabled = true
-            sendApiKey()
+
+            if (config.apiKey.isNotBlank())
+                sendApiKey()
 
             ClientPlayNetworking.registerReceiver(
                 Identifier("lifelinesmp", "integration_invalid")

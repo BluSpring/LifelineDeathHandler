@@ -1,6 +1,7 @@
 package xyz.bluspring.lifelinedeathhandler.client.config
 
 import kotlinx.serialization.SerialName
+import xyz.bluspring.lifelinedeathhandler.common.StreamIntegrationType
 
 @kotlinx.serialization.Serializable
 data class LifelineClientConfig(

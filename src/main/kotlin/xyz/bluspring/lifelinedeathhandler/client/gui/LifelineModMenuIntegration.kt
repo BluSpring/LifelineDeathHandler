@@ -7,7 +7,7 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder
 import net.minecraft.text.Text
 import xyz.bluspring.lifelinedeathhandler.client.LifelineDeathHandlerClient
 import xyz.bluspring.lifelinedeathhandler.client.config.LifelineClientConfig
-import xyz.bluspring.lifelinedeathhandler.client.config.StreamIntegrationType
+import xyz.bluspring.lifelinedeathhandler.common.StreamIntegrationType
 import java.util.function.Supplier
 
 class LifelineModMenuIntegration : ModMenuApi {
