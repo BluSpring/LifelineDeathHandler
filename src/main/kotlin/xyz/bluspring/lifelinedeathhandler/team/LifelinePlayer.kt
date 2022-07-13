@@ -13,7 +13,7 @@ data class LifelinePlayer(
     val name: String,
     val uuid: UUID
 ) {
-    private var cachedSkin: Identifier? = null
+    private var cachedSkin: Identifier? = cachedSkins[uuid]
 
     @Environment(EnvType.CLIENT)
     fun getSkinTexture(): Identifier? {
@@ -29,10 +29,15 @@ data class LifelinePlayer(
             MinecraftClient.getInstance().skinProvider.loadSkin(GameProfile(uuid, name), { type, id, _ ->
                 if (type == MinecraftProfileTexture.Type.SKIN) {
                     cachedSkin = id
+                    cachedSkins[uuid] = id
                 }
             }, false)
 
             cachedSkin ?: DefaultSkinHelper.getTexture(uuid)
         }
+    }
+
+    companion object {
+        private val cachedSkins = mutableMapOf<UUID, Identifier>()
     }
 }
