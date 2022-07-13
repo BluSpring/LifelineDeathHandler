@@ -41,7 +41,7 @@ class WarningHud(private val client: MinecraftClient) : DrawableHelper() {
                     WarningTypes.INVALID_API_KEY -> {
                         this.client.textRenderer.drawWithShadow(
                             matrices,
-                            "Your ${config.type.name} API key is invalid!",
+                            "Your ${config.type.name} API key / Twitch Username is invalid!",
                             0F,
                             0F,
                             16777215

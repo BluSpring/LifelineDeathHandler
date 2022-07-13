@@ -7,3 +7,5 @@
 type: Streamlabs
 # The API key for the stream notification system.
 api-key: ""
+# Your Twitch username (lowercase!)
+twitch-username: ""

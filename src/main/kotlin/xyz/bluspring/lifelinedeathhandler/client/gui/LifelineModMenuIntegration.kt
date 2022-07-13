@@ -29,6 +29,21 @@ class LifelineModMenuIntegration : ModMenuApi {
                 val integrationEntryBuilder = entryBuilder()
 
                 integration.addEntry(
+                    integrationEntryBuilder.startStrField(
+                        Text.of("Twitch Username"),
+                        config.twitchUsername
+                    ).apply {
+                        defaultValue = Supplier { "" }
+
+                        setSaveConsumer {
+                            config.apiKey = it.lowercase()
+
+                            LifelineDeathHandlerClient.sendApiKey()
+                        }
+                    }.build()
+                )
+
+                integration.addEntry(
                     integrationEntryBuilder.startEnumSelector(
                         Text.of("Stream Integration Type"),
                         StreamIntegrationType::class.java,

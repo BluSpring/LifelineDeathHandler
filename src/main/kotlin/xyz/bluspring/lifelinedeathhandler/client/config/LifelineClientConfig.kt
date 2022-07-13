@@ -6,5 +6,7 @@ import kotlinx.serialization.SerialName
 data class LifelineClientConfig(
     var type: StreamIntegrationType,
     @SerialName("api-key")
-    var apiKey: String = ""
+    var apiKey: String = "",
+    @SerialName("twitch-username")
+    var twitchUsername: String = ""
 )

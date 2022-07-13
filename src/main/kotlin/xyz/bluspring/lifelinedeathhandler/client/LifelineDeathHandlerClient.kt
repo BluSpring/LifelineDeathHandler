@@ -160,6 +160,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
         fun sendApiKey() {
             if (isEnabled) {
                 val buf = PacketByteBufs.create()
+                buf.writeString(config.twitchUsername)
                 buf.writeString(config.type.name)
                 buf.writeString(config.apiKey)
 
