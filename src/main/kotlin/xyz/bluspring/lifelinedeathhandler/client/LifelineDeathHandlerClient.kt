@@ -67,7 +67,9 @@ class LifelineDeathHandlerClient : ClientModInitializer {
                     val uuid = it.readUuid()
                     val name = it.readString()
 
-                    LifelinePlayer(name, uuid)
+                    LifelinePlayer(name, uuid).apply {
+                        getSkinTexture() // Cache the texture beforehand so it's ready
+                    }
                 }
 
                 teams[teamId] = LifelineTeam(
@@ -147,7 +149,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
     }
 
     companion object {
-        const val ENABLE_TESTING_STUFF = true
+        const val ENABLE_TESTING_STUFF = false
 
         lateinit var config: LifelineClientConfig
 
