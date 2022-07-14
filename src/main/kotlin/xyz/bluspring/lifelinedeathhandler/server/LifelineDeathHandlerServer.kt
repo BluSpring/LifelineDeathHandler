@@ -50,6 +50,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
 
         ServerPlayConnectionEvents.INIT.register { handler, _ ->
             ServerPlayNetworking.send(handler.getPlayer(), Identifier("lifelinesmp", "initialize"), PacketByteBufs.empty())
+            updateTeams(LifelineTeamManager.teams, listOf(handler.player))
 
             ServerPlayNetworking.registerReceiver(handler, Identifier("lifelinesmp", "stream_integration"))
             { _, player, _, buf, _ ->
@@ -166,6 +167,8 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                 )
                                                 LifelineTeamManager.save()
 
+                                                updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
+
                                                 it.source.sendFeedback(Text.literal("Successfully created team ").append(name), false)
 
                                                 1
@@ -204,6 +207,8 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
 
                                                 LifelineTeamManager.teams.remove(id)
                                                 LifelineTeamManager.save()
+
+                                                updateTeams(mapOf(id to LifelineTeam(0, Text.literal(""), mutableListOf())), it.source.server.playerManager.playerList)
                                                 it.source.sendFeedback(Text.literal("Successfully deleted team ").append(team.name), false)
 
                                                 1
@@ -244,6 +249,9 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
 
                                                         team.name = text
                                                         LifelineTeamManager.save()
+
+                                                        updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
+
                                                         it.source.sendFeedback(
                                                             Text.literal("Successfully changed team ")
                                                                 .append(oldName)
@@ -274,8 +282,8 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                     }
                                                     .then(CommandManager.argument("player", EntityArgumentType.player())
                                                         .executes {
-                                                            val id = it.getArgument("id", String::class.java)
-                                                            val player = it.getArgument("player", PlayerEntity::class.java) as ServerPlayerEntity
+                                                            val id = StringArgumentType.getString(it, "id")
+                                                            val player = EntityArgumentType.getPlayer(it, "player")
 
                                                             if (!LifelineTeamManager.teams.contains(id)) {
                                                                 it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
@@ -301,6 +309,8 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             ))
                                                             LifelineTeamManager.save()
 
+                                                            updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
+
                                                             it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been successfully added to team ").append(team.name), false)
 
                                                             1
@@ -323,7 +333,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                     .then(CommandManager.argument("player", EntityArgumentType.player())
                                                         .executes {
                                                             val id = it.getArgument("id", String::class.java)
-                                                            val player = it.getArgument("player", PlayerEntity::class.java) as ServerPlayerEntity
+                                                            val player = EntityArgumentType.getPlayer(it, "player")
 
                                                             if (!LifelineTeamManager.teams.contains(id)) {
                                                                 it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
@@ -338,6 +348,8 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
 
                                                             team.players.removeIf { pl -> pl.uuid == player.uuid }
                                                             LifelineTeamManager.save()
+
+                                                            updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
 
                                                             it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been removed from team ").append(team.name), false)
 
@@ -357,6 +369,23 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
 
         ServerLifecycleEvents.SERVER_STOPPED.register {
             LifelineTeamManager.stop()
+        }
+    }
+
+    fun updateTeams(teams: Map<String, LifelineTeam>, players: List<ServerPlayerEntity>) {
+        teams.forEach { (id, team) ->
+            val buf = PacketByteBufs.create()
+            buf.writeString(id)
+            buf.writeText(team.name)
+            buf.writeInt(team.lives)
+            buf.writeCollection(team.players) { packetBuf, player ->
+                packetBuf.writeUuid(player.uuid)
+                packetBuf.writeString(player.name)
+            }
+
+            players.forEach { player ->
+                ServerPlayNetworking.send(player, Identifier("lifelinesmp", "team_update"), buf)
+            }
         }
     }
 
