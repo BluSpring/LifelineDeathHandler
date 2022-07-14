@@ -147,28 +147,31 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                         CommandManager.literal("team")
                             .then(
                                 CommandManager.literal("create")
-                                    .then(CommandManager.argument("id", StringArgumentType.string()))
-                                    .then(CommandManager.argument("name", TextArgumentType.text()))
-                                    .executes {
-                                        val id = it.getArgument("id", String::class.java)
-                                        val name = it.getArgument("name", Text::class.java)
+                                    .then(CommandManager.argument("id", StringArgumentType.string())
+                                        .then(
+                                            CommandManager.argument("name", TextArgumentType.text())
+                                            .executes {
+                                                val id = it.getArgument("id", String::class.java)
+                                                val name = it.getArgument("name", Text::class.java)
 
-                                        if (LifelineTeamManager.teams.contains(id)) {
-                                            it.source.sendError(Text.literal("Team $id already exists!").formatted(Formatting.RED))
-                                            return@executes 1
-                                        }
+                                                if (LifelineTeamManager.teams.contains(id)) {
+                                                    it.source.sendError(Text.literal("Team $id already exists!").formatted(Formatting.RED))
+                                                    return@executes 1
+                                                }
 
-                                        LifelineTeamManager.teams[id] = LifelineTeam(
-                                            config.defaultLives,
-                                            name,
-                                            mutableListOf()
+                                                LifelineTeamManager.teams[id] = LifelineTeam(
+                                                    config.defaultLives,
+                                                    name,
+                                                    mutableListOf()
+                                                )
+                                                LifelineTeamManager.save()
+
+                                                it.source.sendFeedback(Text.literal("Successfully created team ").append(name), false)
+
+                                                1
+                                            }
                                         )
-                                        LifelineTeamManager.save()
-
-                                        it.source.sendFeedback(Text.literal("Successfully created team ").append(name), false)
-
-                                        1
-                                    }
+                                    )
                             )
                             .then(
                                 CommandManager.literal("delete")
@@ -183,29 +186,29 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                     }
                                                 }.buildFuture()
                                             }
-                                    )
-                                    .executes {
-                                        val id = it.getArgument("id", String::class.java)
+                                            .executes {
+                                                val id = it.getArgument("id", String::class.java)
 
-                                        if (!LifelineTeamManager.teams.contains(id)) {
-                                            it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
-                                            return@executes 1
-                                        }
+                                                if (!LifelineTeamManager.teams.contains(id)) {
+                                                    it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
+                                                    return@executes 1
+                                                }
 
-                                        val team = LifelineTeamManager.teams[id]!!
+                                                val team = LifelineTeamManager.teams[id]!!
 
-                                        it.source.server.playerManager.playerList.forEach { player ->
-                                            if (LifelineTeamManager.getPlayerTeam(player) == team) {
-                                                player.customName = null
+                                                it.source.server.playerManager.playerList.forEach { player ->
+                                                    if (LifelineTeamManager.getPlayerTeam(player) == team) {
+                                                        player.customName = null
+                                                    }
+                                                }
+
+                                                LifelineTeamManager.teams.remove(id)
+                                                LifelineTeamManager.save()
+                                                it.source.sendFeedback(Text.literal("Successfully deleted team ").append(team.name), false)
+
+                                                1
                                             }
-                                        }
-
-                                        LifelineTeamManager.teams.remove(id)
-                                        LifelineTeamManager.save()
-                                        it.source.sendFeedback(Text.literal("Successfully deleted team ").append(team.name), false)
-
-                                        1
-                                    }
+                                    )
                             )
                             .then(
                                 CommandManager.literal("modify")
@@ -219,41 +222,39 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                         }
                                                     }
                                                 }.buildFuture()
-                                            }
-                                    )
-                                    .then(
-                                        CommandManager.argument("name", TextArgumentType.text())
-                                    )
-                                    .executes {
-                                        val id = it.getArgument("id", String::class.java)
-                                        val text = it.getArgument("name", Text::class.java)
+                                            }.then(
+                                                CommandManager.argument("name", TextArgumentType.text())
+                                                    .executes {
+                                                        val id = it.getArgument("id", String::class.java)
+                                                        val text = it.getArgument("name", Text::class.java)
 
-                                        if (!LifelineTeamManager.teams.contains(id)) {
-                                            it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
-                                            return@executes 1
-                                        }
+                                                        if (!LifelineTeamManager.teams.contains(id)) {
+                                                            it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
+                                                            return@executes 1
+                                                        }
 
-                                        val team = LifelineTeamManager.teams[id]!!
-                                        val oldName = team.name
+                                                        val team = LifelineTeamManager.teams[id]!!
+                                                        val oldName = team.name
 
-                                        it.source.server.playerManager.playerList.forEach { player ->
-                                            if (LifelineTeamManager.getPlayerTeam(player) == team) {
-                                                player.customName = player.name.copy().setStyle(text.style)
-                                            }
-                                        }
+                                                        it.source.server.playerManager.playerList.forEach { player ->
+                                                            if (LifelineTeamManager.getPlayerTeam(player) == team) {
+                                                                player.customName = player.name.copy().setStyle(text.style)
+                                                            }
+                                                        }
 
-                                        team.name = text
-                                        LifelineTeamManager.save()
-                                        it.source.sendFeedback(
-                                            Text.literal("Successfully changed team ")
-                                                .append(oldName)
-                                                .append(Text.literal(" to "))
-                                                .append(text),
-                                            false
-                                        )
+                                                        team.name = text
+                                                        LifelineTeamManager.save()
+                                                        it.source.sendFeedback(
+                                                            Text.literal("Successfully changed team ")
+                                                                .append(oldName)
+                                                                .append(Text.literal(" to "))
+                                                                .append(text),
+                                                            false
+                                                        )
 
-                                        1
-                                    }
+                                                        1
+                                                    }
+                                            )
                             )
                             .then(
                                 CommandManager.literal("player")
@@ -343,6 +344,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                 1
                                             }
                                     )
+                            )
                             )
                     )
             )
