@@ -93,6 +93,8 @@ class LifelineDeathHandlerClient : ClientModInitializer {
 
         ClientPlayConnectionEvents.DISCONNECT.register { _, _ ->
             isEnabled = false
+
+            teams.clear()
         }
 
         // testing purposes
