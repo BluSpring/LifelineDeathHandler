@@ -52,7 +52,7 @@ class LifelineModMenuIntegration : ModMenuApi {
                         config.type
                     ).apply {
                         defaultValue = Supplier {
-                            StreamIntegrationType.StreamElements
+                            StreamIntegrationType.STREAMELEMENTS
                         }
 
                         setSaveConsumer {

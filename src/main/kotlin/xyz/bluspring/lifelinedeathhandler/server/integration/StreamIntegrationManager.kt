@@ -20,9 +20,9 @@ object StreamIntegrationManager {
     fun registerIntegration(player: ServerPlayerEntity, username: String, integrationType: StreamIntegrationType, apiKey: String) {
         integrations[player]?.stop()
 
-        if (integrationType == StreamIntegrationType.StreamElements) {
+        if (integrationType == StreamIntegrationType.STREAMELEMENTS) {
             integrations[player] = StreamElementsStreamIntegration(player, apiKey, username)
-        } else if (integrationType == StreamIntegrationType.Streamlabs) {
+        } else if (integrationType == StreamIntegrationType.STREAMLABS) {
             integrations[player] = StreamlabsStreamIntegration(player, apiKey, username)
         }
 
@@ -52,7 +52,7 @@ object StreamIntegrationManager {
                             .copy()
                             .formatted(Formatting.YELLOW)
                             .append(
-                                Text.of(" has subscribed to you, and given you").copy().formatted(Formatting.DARK_AQUA)
+                                Text.of(" has subscribed (${tier.type}) to you, and given you").copy().formatted(Formatting.DARK_AQUA)
                             ).append(
                                 Text.of(" ${itemStack.count}x ").copy().append(Text.translatable(itemStack.item.translationKey)).formatted(Formatting.YELLOW)
                             ).append(
@@ -69,7 +69,7 @@ object StreamIntegrationManager {
                             .copy()
                             .formatted(Formatting.YELLOW)
                             .append(
-                                Text.of(" has subscribed to you, and given you").copy().formatted(Formatting.DARK_AQUA)
+                                Text.of(" has subscribed (${tier.type}) to you, and given you").copy().formatted(Formatting.DARK_AQUA)
                             ).append(
                                 Text.of(" ${it.add} ${if (it.add == 1) "life" else "lives"}").copy().formatted(Formatting.YELLOW)
                             ).append(
@@ -109,7 +109,7 @@ object StreamIntegrationManager {
                             .copy()
                             .formatted(Formatting.YELLOW)
                             .append(
-                                Text.of(" has gifted $amount subscription${if (amount == 1) "" else "s"} to you, and given you").copy().formatted(Formatting.DARK_AQUA)
+                                Text.of(" has gifted $amount subscription${if (amount == 1) "" else "s"} (${tier.type}) to you, and given you").copy().formatted(Formatting.DARK_AQUA)
                             ).append(
                                 Text.of(" ${itemStack.count}x ").copy().append(Text.translatable(itemStack.item.translationKey)).formatted(Formatting.YELLOW)
                             ).append(
@@ -130,7 +130,7 @@ object StreamIntegrationManager {
                             .copy()
                             .formatted(Formatting.YELLOW)
                             .append(
-                                Text.of(" has gifted $amount subscription${if (amount == 1) "" else "s"} to you, and given you").copy().formatted(Formatting.DARK_AQUA)
+                                Text.of(" has gifted $amount subscription${if (amount == 1) "" else "s"} (${tier.type}) to you, and given you").copy().formatted(Formatting.DARK_AQUA)
                             ).append(
                                 Text.of(" $add ${if (add == 1) "life" else "lives"}").copy().formatted(Formatting.YELLOW)
                             ).append(
