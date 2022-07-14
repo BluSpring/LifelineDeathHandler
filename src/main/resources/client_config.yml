@@ -3,8 +3,8 @@
 # Go off ig?
 
 # The stream notification system used for the streamer.
-# Accepted values: Streamlabs, StreamElements
-type: StreamElements
+# Accepted values: STREAMLABS, STREAMELEMENTS
+type: STREAMELEMENTS
 # The API key for the stream notification system.
 api-key: ""
 # Your Twitch username (lowercase!)

@@ -10,7 +10,8 @@ viewer-assistance:
   twitch-subscription-gift:
     enabled: true
     types:
-      - type: LIFE_ADD_EVERY
+      - !<LIFE_ADD_EVERY>
+        type: LIFE_ADD_EVERY
         tiers:
           - TIER_1
           - TIER_2
@@ -21,13 +22,15 @@ viewer-assistance:
   twitch-cheer:
     enabled: true
     types:
-      - type: LIFE_ADD_EVERY
+      - !<LIFE_ADD_EVERY>
+        type: LIFE_ADD_EVERY
         per: 2500
         add: 1
   twitch-subscription:
     enabled: true
     types:
-      - tiers:
+      - !<ITEM_GIVE>
+        tiers:
           - TIER_1
           - TIER_2
           - TIER_3
