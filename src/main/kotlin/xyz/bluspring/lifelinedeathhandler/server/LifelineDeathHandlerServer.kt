@@ -255,6 +255,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                         1
                                                     }
                                             )
+                                    )
                             )
                             .then(
                                 CommandManager.literal("player")
@@ -271,40 +272,40 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             }
                                                         }.buildFuture()
                                                     }
+                                                    .then(CommandManager.argument("player", EntityArgumentType.player())
+                                                        .executes {
+                                                            val id = it.getArgument("id", String::class.java)
+                                                            val player = it.getArgument("player", PlayerEntity::class.java) as ServerPlayerEntity
+
+                                                            if (!LifelineTeamManager.teams.contains(id)) {
+                                                                it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
+                                                                return@executes 1
+                                                            }
+
+                                                            val team = LifelineTeamManager.teams[id]!!
+                                                            if (team.players.any { pl -> pl.uuid == player.uuid }) {
+                                                                it.source.sendError(Text.literal("Player is already in team!").formatted(Formatting.RED))
+                                                                return@executes 1
+                                                            }
+
+                                                            val originalTeam = LifelineTeamManager.getPlayerTeam(player)
+
+                                                            if (originalTeam != null) {
+                                                                originalTeam.players.removeIf { pl -> pl.uuid == player.uuid }
+                                                                it.source.sendFeedback(Text.literal("Player was removed from their original team ").append(originalTeam.name).append(Text.literal(" to join this team.")), false)
+                                                            }
+
+                                                            team.players.add(LifelinePlayer(
+                                                                player.gameProfile.name,
+                                                                player.gameProfile.id
+                                                            ))
+                                                            LifelineTeamManager.save()
+
+                                                            it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been successfully added to team ").append(team.name), false)
+
+                                                            1
+                                                        })
                                             )
-                                            .then(CommandManager.argument("player", EntityArgumentType.player()))
-                                            .executes {
-                                                val id = it.getArgument("id", String::class.java)
-                                                val player = it.getArgument("player", PlayerEntity::class.java) as ServerPlayerEntity
-
-                                                if (!LifelineTeamManager.teams.contains(id)) {
-                                                    it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
-                                                    return@executes 1
-                                                }
-
-                                                val team = LifelineTeamManager.teams[id]!!
-                                                if (team.players.any { pl -> pl.uuid == player.uuid }) {
-                                                    it.source.sendError(Text.literal("Player is already in team!").formatted(Formatting.RED))
-                                                    return@executes 1
-                                                }
-
-                                                val originalTeam = LifelineTeamManager.getPlayerTeam(player)
-
-                                                if (originalTeam != null) {
-                                                    originalTeam.players.removeIf { pl -> pl.uuid == player.uuid }
-                                                    it.source.sendFeedback(Text.literal("Player was removed from their original team ").append(originalTeam.name).append(Text.literal(" to join this team.")), false)
-                                                }
-
-                                                team.players.add(LifelinePlayer(
-                                                    player.gameProfile.name,
-                                                    player.gameProfile.id
-                                                ))
-                                                LifelineTeamManager.save()
-
-                                                it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been successfully added to team ").append(team.name), false)
-
-                                                1
-                                            }
                                     )
                                     .then(
                                         CommandManager.literal("remove")
@@ -319,32 +320,32 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             }
                                                         }.buildFuture()
                                                     }
+                                                    .then(CommandManager.argument("player", EntityArgumentType.player())
+                                                        .executes {
+                                                            val id = it.getArgument("id", String::class.java)
+                                                            val player = it.getArgument("player", PlayerEntity::class.java) as ServerPlayerEntity
+
+                                                            if (!LifelineTeamManager.teams.contains(id)) {
+                                                                it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
+                                                                return@executes 1
+                                                            }
+
+                                                            val team = LifelineTeamManager.teams[id]!!
+                                                            if (!team.players.any { pl -> pl.uuid == player.uuid }) {
+                                                                it.source.sendError(Text.literal("Player is not in the team!").formatted(Formatting.RED))
+                                                                return@executes 1
+                                                            }
+
+                                                            team.players.removeIf { pl -> pl.uuid == player.uuid }
+                                                            LifelineTeamManager.save()
+
+                                                            it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been removed from team ").append(team.name), false)
+
+                                                            1
+                                                        }
+                                                    )
                                             )
-                                            .then(CommandManager.argument("player", EntityArgumentType.player()))
-                                            .executes {
-                                                val id = it.getArgument("id", String::class.java)
-                                                val player = it.getArgument("player", PlayerEntity::class.java) as ServerPlayerEntity
-
-                                                if (!LifelineTeamManager.teams.contains(id)) {
-                                                    it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
-                                                    return@executes 1
-                                                }
-
-                                                val team = LifelineTeamManager.teams[id]!!
-                                                if (!team.players.any { pl -> pl.uuid == player.uuid }) {
-                                                    it.source.sendError(Text.literal("Player is not in the team!").formatted(Formatting.RED))
-                                                    return@executes 1
-                                                }
-
-                                                team.players.removeIf { pl -> pl.uuid == player.uuid }
-                                                LifelineTeamManager.save()
-
-                                                it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been removed from team ").append(team.name), false)
-
-                                                1
-                                            }
                                     )
-                            )
                             )
                     )
             )
