@@ -4,12 +4,12 @@ import com.charleskorn.kaml.Yaml
 import com.mojang.brigadier.arguments.StringArgumentType
 import net.fabricmc.api.DedicatedServerModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.command.argument.EntityArgumentType
-import net.minecraft.command.argument.GameProfileArgumentType
 import net.minecraft.command.argument.TextArgumentType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.command.CommandManager
@@ -163,6 +163,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                             name,
                                             mutableListOf()
                                         )
+                                        LifelineTeamManager.save()
 
                                         it.source.sendFeedback(Text.literal("Successfully created team ").append(name), false)
 
@@ -200,6 +201,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                         }
 
                                         LifelineTeamManager.teams.remove(id)
+                                        LifelineTeamManager.save()
                                         it.source.sendFeedback(Text.literal("Successfully deleted team ").append(team.name), false)
 
                                         1
@@ -241,6 +243,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                         }
 
                                         team.name = text
+                                        LifelineTeamManager.save()
                                         it.source.sendFeedback(
                                             Text.literal("Successfully changed team ")
                                                 .append(oldName)
@@ -295,6 +298,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                     player.gameProfile.name,
                                                     player.gameProfile.id
                                                 ))
+                                                LifelineTeamManager.save()
 
                                                 it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been successfully added to team ").append(team.name), false)
 
@@ -332,6 +336,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                 }
 
                                                 team.players.removeIf { pl -> pl.uuid == player.uuid }
+                                                LifelineTeamManager.save()
 
                                                 it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been removed from team ").append(team.name), false)
 
@@ -342,12 +347,19 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                     )
             )
         }
+
+        ServerLifecycleEvents.SERVER_STARTING.register {
+            LifelineTeamManager.load()
+        }
+
+        ServerLifecycleEvents.SERVER_STOPPED.register {
+            LifelineTeamManager.stop()
+        }
     }
 
     companion object {
         lateinit var config: LifelineServerConfig
 
         val configFile = File(FabricLoader.getInstance().configDir.toFile(), "lifeline_server_config.yml")
-        val teams = mutableMapOf<String, LifelineTeam>()
     }
 }

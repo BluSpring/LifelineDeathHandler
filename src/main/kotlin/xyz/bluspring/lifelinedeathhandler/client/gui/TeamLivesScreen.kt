@@ -12,7 +12,6 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Style
 import net.minecraft.text.Text
-import net.minecraft.text.TextColor
 import net.minecraft.util.Identifier
 import xyz.bluspring.lifelinedeathhandler.client.LifelineDeathHandlerClient
 import xyz.bluspring.lifelinedeathhandler.client.gui.spruceui.SpruceImageTextureWidget
@@ -111,7 +110,8 @@ class TeamLivesScreen(private val parent: Screen? = null) : SpruceScreen(Text.of
                             addChild(
                                 SpruceLabelWidget(
                                     Position.of(width - posX + 4 + (heartSize * heartScale), height / 2),
-                                    Text.of("x ${it.value.lives}").copy().setStyle(Style.EMPTY.withColor(LifelineTeam.getColorFromLives(it.value.lives))),
+                                    Text.of("x ${it.value.lives}").copy().setStyle(Style.EMPTY.withColor(
+                                        LifelineTeam.getColorFromLives(it.value.lives))),
                                     client.textRenderer.getWidth(Text.of("x ${it.value.lives}"))
                                 )
                             )

@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory
 import xyz.bluspring.lifelinedeathhandler.client.config.LifelineClientConfig
 import xyz.bluspring.lifelinedeathhandler.client.gui.WarningHud
 import xyz.bluspring.lifelinedeathhandler.client.gui.WarningTypes
-import xyz.bluspring.lifelinedeathhandler.team.LifelinePlayer
 import xyz.bluspring.lifelinedeathhandler.team.LifelineTeam
+import xyz.bluspring.lifelinedeathhandler.team.LifelinePlayer
 import java.io.File
 import java.util.*
 

@@ -1,5 +1,6 @@
 package xyz.bluspring.lifelinedeathhandler.team
 
+import com.google.gson.JsonObject
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.minecraft.MinecraftProfileTexture
 import net.fabricmc.api.EnvType
@@ -14,6 +15,13 @@ data class LifelinePlayer(
     val uuid: UUID
 ) {
     private var cachedSkin: Identifier? = cachedSkins[uuid]
+
+    fun serialize(): JsonObject {
+        return JsonObject().apply {
+            addProperty("name", name)
+            addProperty("uuid", uuid.toString())
+        }
+    }
 
     @Environment(EnvType.CLIENT)
     fun getSkinTexture(): Identifier? {
@@ -39,5 +47,12 @@ data class LifelinePlayer(
 
     companion object {
         private val cachedSkins = mutableMapOf<UUID, Identifier>()
+
+        fun deserialize(data: JsonObject): LifelinePlayer {
+            return LifelinePlayer(
+                data.get("name").asString,
+                UUID.fromString(data.get("uuid").asString)
+            )
+        }
     }
 }
