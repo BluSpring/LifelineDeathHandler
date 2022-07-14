@@ -60,11 +60,6 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    include(implementation("org.jetbrains.exposed:exposed-core:0.38.2"))
-    include(implementation("org.jetbrains.exposed:exposed-dao:0.38.2"))
-    include(implementation("org.jetbrains.exposed:exposed-jdbc:0.38.2"))
-    include(implementation("org.xerial:sqlite-jdbc:3.36.0.3"))
-
     include(modImplementation("dev.lambdaurora:spruceui:4.0.0+1.19"))
 
     // Fabric API. This is technically optional, but you probably want it anyway.
