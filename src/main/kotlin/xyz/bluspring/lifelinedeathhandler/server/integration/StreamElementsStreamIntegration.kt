@@ -51,7 +51,7 @@ class StreamElementsStreamIntegration(player: ServerPlayerEntity, apiKey: String
     override fun onEvent(vararg args: Any) {
         val event = LifelineDeathHandler.convertJsonToGson(args[0] as JSONObject)
 
-        if (!event.has("data") || !event.get("data").isJsonObject) {
+        if (!event.has("event") || !event.get("event").isJsonObject) {
             logger.warn("Discarding unexpected StreamElements packet: $event")
             return
         }
