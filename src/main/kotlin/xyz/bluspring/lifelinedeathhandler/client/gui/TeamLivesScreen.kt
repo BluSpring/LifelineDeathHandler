@@ -96,16 +96,29 @@ class TeamLivesScreen(private val parent: Screen? = null) : SpruceScreen(Text.of
                             val heartV = 0F
                             val heartScale = (2 * client.window.scaleFactor).toInt()
 
-                            addChild(
-                                SpruceImageTextureWidget(
-                                    Position.of(width - posX, height / 4),
-                                    heartSize * heartScale, heartSize * heartScale,
-                                    Identifier("minecraft", "textures/gui/icons.png"),
-                                    heartU * heartScale, heartV * heartScale,
-                                    heartSize * heartScale, heartSize * heartScale,
-                                    256 * heartScale, 256 * heartScale
+                            if (it.value.lives <= 0) {
+                                addChild(
+                                    SpruceImageTextureWidget(
+                                        Position.of(width - posX, height / 4),
+                                        heartSize * heartScale, heartSize * heartScale,
+                                        Identifier("minecraft", "textures/gui/icons.png"),
+                                        heartU * heartScale, (heartV + 9) * heartScale,
+                                        heartSize * heartScale, heartSize * heartScale,
+                                        256 * heartScale, 256 * heartScale
+                                    )
                                 )
-                            )
+                            } else {
+                                addChild(
+                                    SpruceImageTextureWidget(
+                                        Position.of(width - posX, height / 4),
+                                        heartSize * heartScale, heartSize * heartScale,
+                                        Identifier("minecraft", "textures/gui/icons.png"),
+                                        heartU * heartScale, heartV * heartScale,
+                                        heartSize * heartScale, heartSize * heartScale,
+                                        256 * heartScale, 256 * heartScale
+                                    )
+                                )
+                            }
 
                             addChild(
                                 SpruceLabelWidget(

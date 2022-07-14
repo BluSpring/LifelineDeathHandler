@@ -1,12 +1,7 @@
 package xyz.bluspring.lifelinedeathhandler.client.gui.spruceui
 
-import com.mojang.blaze3d.systems.RenderSystem
 import dev.lambdaurora.spruceui.Position
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.render.GameRenderer
-import net.minecraft.client.render.Tessellator
-import net.minecraft.client.render.VertexFormat
-import net.minecraft.client.render.VertexFormats
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
