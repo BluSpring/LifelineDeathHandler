@@ -89,6 +89,11 @@ object StreamIntegrationManager {
                                 .append(Text.literal(" You now have ${team.lives} lives.").formatted(Formatting.YELLOW))
                         )
                     }
+
+                    val id = LifelineTeamManager.teams.entries.first { t -> t.value == team }.key
+                    LifelineDeathHandlerServer.updateTeams(mapOf(id to team), player.server.playerManager.playerList)
+
+                    LifelineTeamManager.save()
                 }
 
                 else -> {}
@@ -158,6 +163,11 @@ object StreamIntegrationManager {
                                 .append(Text.literal(" You now have ${team.lives} lives.").formatted(Formatting.YELLOW))
                         )
                     }
+
+                    val id = LifelineTeamManager.teams.entries.first { t -> t.value == team }.key
+                    LifelineDeathHandlerServer.updateTeams(mapOf(id to team), player.server.playerManager.playerList)
+
+                    LifelineTeamManager.save()
                 }
 
                 else -> {}
@@ -215,6 +225,11 @@ object StreamIntegrationManager {
                                 Text.of("!").copy().formatted(Formatting.DARK_AQUA)
                             )
                     )
+
+                    val id = LifelineTeamManager.teams.entries.first { t -> t.value == team }.key
+                    LifelineDeathHandlerServer.updateTeams(mapOf(id to team), player.server.playerManager.playerList)
+
+                    LifelineTeamManager.save()
                 }
 
                 else -> {}

@@ -372,26 +372,26 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
         }
     }
 
-    fun updateTeams(teams: Map<String, LifelineTeam>, players: List<ServerPlayerEntity>) {
-        teams.forEach { (id, team) ->
-            val buf = PacketByteBufs.create()
-            buf.writeString(id)
-            buf.writeText(team.name)
-            buf.writeInt(team.lives)
-            buf.writeCollection(team.players) { packetBuf, player ->
-                packetBuf.writeUuid(player.uuid)
-                packetBuf.writeString(player.name)
-            }
-
-            players.forEach { player ->
-                ServerPlayNetworking.send(player, Identifier("lifelinesmp", "team_update"), buf)
-            }
-        }
-    }
-
     companion object {
         lateinit var config: LifelineServerConfig
 
         val configFile = File(FabricLoader.getInstance().configDir.toFile(), "lifeline_server_config.yml")
+
+        fun updateTeams(teams: Map<String, LifelineTeam>, players: List<ServerPlayerEntity>) {
+            teams.forEach { (id, team) ->
+                val buf = PacketByteBufs.create()
+                buf.writeString(id)
+                buf.writeText(team.name)
+                buf.writeInt(team.lives)
+                buf.writeCollection(team.players) { packetBuf, player ->
+                    packetBuf.writeUuid(player.uuid)
+                    packetBuf.writeString(player.name)
+                }
+
+                players.forEach { player ->
+                    ServerPlayNetworking.send(player, Identifier("lifelinesmp", "team_update"), buf)
+                }
+            }
+        }
     }
 }

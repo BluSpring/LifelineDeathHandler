@@ -20,6 +20,7 @@ abstract class StreamIntegration(val player: ServerPlayerEntity, val apiKey: Str
     open fun start() {
         logger.info("Starting ${integrationType.integrationName} Stream Integration for player ${player.name}.")
         socket = createSocket()
+        socket.connect()
     }
 
     open fun stop() {

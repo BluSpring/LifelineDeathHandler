@@ -57,9 +57,14 @@ object LifelineMixinHandler {
                             .append(Text.literal(" You now have ${attackerTeam.lives} lives.").formatted(Formatting.YELLOW))
                     )
                 }
+
+                val attackerId = LifelineTeamManager.teams.entries.first { it.value == attackerTeam }.key
+                LifelineDeathHandlerServer.updateTeams(mapOf(attackerId to attackerTeam), player.server.playerManager.playerList)
             }
         }
 
         LifelineTeamManager.save()
+        val id = LifelineTeamManager.teams.entries.first { it.value == team }.key
+        LifelineDeathHandlerServer.updateTeams(mapOf(id to team), player.server.playerManager.playerList)
     }
 }
