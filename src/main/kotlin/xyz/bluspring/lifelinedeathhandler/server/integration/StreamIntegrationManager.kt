@@ -81,6 +81,14 @@ object StreamIntegrationManager {
                                 Text.of("!").copy().formatted(Formatting.DARK_AQUA)
                             )
                     )
+
+                    player.server.playerManager.playerList.filter { pl -> LifelineTeamManager.getPlayerTeam(pl) == team }.forEach { pl ->
+                        pl.sendMessage(
+                            Text.literal("[!] Your team has gained ${if (it.add == 1) "a life" else "${it.add} lives"}\")!")
+                                .formatted(Formatting.GREEN)
+                                .append(Text.literal(" You now have ${team.lives} lives.").formatted(Formatting.YELLOW))
+                        )
+                    }
                 }
 
                 else -> {}
@@ -142,6 +150,14 @@ object StreamIntegrationManager {
                                 Text.of("!").copy().formatted(Formatting.DARK_AQUA)
                             )
                     )
+
+                    player.server.playerManager.playerList.filter { pl -> LifelineTeamManager.getPlayerTeam(pl) == team }.forEach { pl ->
+                        pl.sendMessage(
+                            Text.literal("[!] Your team has gained ${if (add == 1) "a life" else "$add lives"}\")!")
+                                .formatted(Formatting.GREEN)
+                                .append(Text.literal(" You now have ${team.lives} lives.").formatted(Formatting.YELLOW))
+                        )
+                    }
                 }
 
                 else -> {}
