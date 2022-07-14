@@ -48,9 +48,6 @@ class LifelineDeathHandlerClient : ClientModInitializer {
         ) { _, _, _, _ ->
             isEnabled = true
 
-            if (config.apiKey.isNotBlank())
-                sendApiKey()
-
             ClientPlayNetworking.registerReceiver(
                 Identifier("lifelinesmp", "integration_invalid")
             ) { _, _, _, _ ->
@@ -87,6 +84,11 @@ class LifelineDeathHandlerClient : ClientModInitializer {
                     teamPlayers
                 )
             }
+        }
+
+        ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
+            if (isEnabled && config.apiKey.isNotBlank())
+                sendApiKey()
         }
 
         ClientPlayConnectionEvents.DISCONNECT.register { _, _ ->
