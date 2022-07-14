@@ -6,6 +6,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import xyz.bluspring.lifelinedeathhandler.common.StreamIntegrationType
 import xyz.bluspring.lifelinedeathhandler.server.LifelineDeathHandlerServer
 import xyz.bluspring.lifelinedeathhandler.server.config.viewer.TwitchViewerAssistanceInfo
 import xyz.bluspring.lifelinedeathhandler.server.config.viewer.ViewerAssistanceInfo
@@ -14,6 +15,19 @@ import kotlin.math.floor
 
 object StreamIntegrationManager {
     private val viewerAssistance = LifelineDeathHandlerServer.config.viewerAssistance
+    val integrations = mutableMapOf<ServerPlayerEntity, StreamIntegration>()
+
+    fun registerIntegration(player: ServerPlayerEntity, username: String, integrationType: StreamIntegrationType, apiKey: String) {
+        integrations[player]?.stop()
+
+        if (integrationType == StreamIntegrationType.StreamElements) {
+            integrations[player] = StreamElementsStreamIntegration(player, apiKey, username)
+        }/* else if (integrationType == StreamIntegrationType.Streamlabs) {
+            integrations[player] = StreamlabsStreamIntegration(player, apiKey, username)
+        }*/
+
+        integrations[player]!!.start()
+    }
 
     fun handleTwitchSubscription(player: ServerPlayerEntity, tier: TwitchSubscriptionTiers, actor: String) {
         if (!viewerAssistance.twitchSubscription.enabled)

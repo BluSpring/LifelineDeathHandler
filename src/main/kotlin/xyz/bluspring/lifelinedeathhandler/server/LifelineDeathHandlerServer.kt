@@ -12,6 +12,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.bluspring.lifelinedeathhandler.common.StreamIntegrationType
 import xyz.bluspring.lifelinedeathhandler.server.config.LifelineServerConfig
+import xyz.bluspring.lifelinedeathhandler.server.integration.StreamIntegrationManager
 import xyz.bluspring.lifelinedeathhandler.team.LifelineTeam
 import java.io.File
 
@@ -43,11 +44,15 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                     val integrationType = StreamIntegrationType.valueOf(buf.readString())
                     val apiKey = buf.readString()
 
-
+                    StreamIntegrationManager.registerIntegration(player, twitchUsername, integrationType, apiKey)
                 } catch (e: Exception) {
-                    handler.disconnect(Text.of("LifelineDeathHandler Error whilst parsing stream integration: ${e}"))
+                    handler.disconnect(Text.of("LifelineDeathHandler Error whilst parsing stream integration: $e"))
                 }
             }
+        }
+
+        ServerPlayConnectionEvents.DISCONNECT.register { handler, _ ->
+            StreamIntegrationManager.integrations.remove(handler.getPlayer())
         }
     }
 

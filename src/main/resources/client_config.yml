@@ -4,7 +4,7 @@
 
 # The stream notification system used for the streamer.
 # Accepted values: Streamlabs, StreamElements
-type: Streamlabs
+type: StreamElements
 # The API key for the stream notification system.
 api-key: ""
 # Your Twitch username (lowercase!)
