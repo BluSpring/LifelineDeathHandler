@@ -2,15 +2,22 @@ package xyz.bluspring.lifelinedeathhandler.client
 
 import com.charleskorn.kaml.Yaml
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.option.KeyBinding
+import net.minecraft.client.util.InputUtil
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import org.lwjgl.glfw.GLFW
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.bluspring.lifelinedeathhandler.client.config.LifelineClientConfig
+import xyz.bluspring.lifelinedeathhandler.client.gui.TeamLivesScreen
 import xyz.bluspring.lifelinedeathhandler.client.gui.WarningHud
 import xyz.bluspring.lifelinedeathhandler.client.gui.WarningTypes
 import xyz.bluspring.lifelinedeathhandler.team.LifelineTeam
@@ -148,6 +155,23 @@ class LifelineDeathHandlerClient : ClientModInitializer {
                 )
             )
         }
+
+        teamListKeybind = KeyBindingHelper.registerKeyBinding(
+            KeyBinding(
+                "key.lifelinesmp.teamList",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_Z,
+                "category.lifelinesmp"
+            )
+        )
+
+        ClientTickEvents.END_CLIENT_TICK.register {
+            while (teamListKeybind.wasPressed()) {
+                if (isEnabled) {
+                    MinecraftClient.getInstance().setScreen(TeamLivesScreen(MinecraftClient.getInstance().currentScreen))
+                }
+            }
+        }
     }
 
     companion object {
@@ -169,5 +193,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
                 ClientPlayNetworking.send(Identifier("lifelinesmp", "stream_integration"), buf)
             }
         }
+
+        lateinit var teamListKeybind: KeyBinding
     }
 }

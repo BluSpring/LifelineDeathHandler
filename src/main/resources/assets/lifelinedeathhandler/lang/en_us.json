@@ -90,5 +90,8 @@
   "lifeline.death.attack.freeze": "%1$s freezing to death",
   "lifeline.death.attack.freeze.player": "%1$s being frozen to death by %2$s",
 
-  "lifeline.death.fell.accident.water": "%1$s trying to get the \"death.fell.accident.water\" death message"
+  "lifeline.death.fell.accident.water": "%1$s trying to get the \"death.fell.accident.water\" death message",
+
+  "category.lifelinesmp": "LifelineSMP",
+  "key.lifelinesmp.teamList": "Open Teams List"
 }
