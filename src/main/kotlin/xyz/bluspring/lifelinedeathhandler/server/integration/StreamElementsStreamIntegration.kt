@@ -1,9 +1,6 @@
 package xyz.bluspring.lifelinedeathhandler.server.integration
 
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

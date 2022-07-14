@@ -22,9 +22,9 @@ object StreamIntegrationManager {
 
         if (integrationType == StreamIntegrationType.StreamElements) {
             integrations[player] = StreamElementsStreamIntegration(player, apiKey, username)
-        }/* else if (integrationType == StreamIntegrationType.Streamlabs) {
+        } else if (integrationType == StreamIntegrationType.Streamlabs) {
             integrations[player] = StreamlabsStreamIntegration(player, apiKey, username)
-        }*/
+        }
 
         integrations[player]!!.start()
     }
