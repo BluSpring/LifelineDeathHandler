@@ -4,9 +4,11 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.damage.DamageTracker
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableTextContent
 import net.minecraft.util.Formatting
+import net.minecraft.world.GameMode
 import xyz.bluspring.lifelinedeathhandler.server.team.LifelineTeamManager
 import xyz.bluspring.lifelinedeathhandler.server.team.LifelineTeamManager.getPlayerTeam
 
@@ -42,6 +44,32 @@ object LifelineMixinHandler {
                     .formatted(Formatting.RED)
                     .append(Text.literal(" You now have ${team.lives} lives.").formatted(Formatting.YELLOW))
             )
+
+            if (team.lives <= 0) {
+                it.changeGameMode(GameMode.SPECTATOR)
+            }
+        }
+
+        if (team.lives <= 0) {
+            player.server.playerManager.playerList.forEach {
+                it.sendMessage(
+                    Text.literal("[!] ")
+                        .formatted(Formatting.DARK_RED)
+                        .append(
+                            Text.literal("Team ")
+                                .formatted(Formatting.RED)
+                        ).append(
+                            team.name
+                        )
+                        .append(
+                            Text.literal(" has lost all their lives!")
+                                .formatted(Formatting.RED)
+                        )
+                )
+
+                it.playSound(SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, .6F, 1F)
+                it.playSound(SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, .4F, 1F)
+            }
         }
 
         if (source.attacker != null && source.attacker!!.type == EntityType.PLAYER) {

@@ -19,6 +19,7 @@ import net.minecraft.text.Text
 import net.minecraft.text.TextColor
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
+import net.minecraft.world.GameMode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.bluspring.lifelinedeathhandler.common.StreamIntegrationType
@@ -70,14 +71,13 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
             }
         }
 
-        // This is so when teams are deleted while a player is offline,
-        // or when they are edited, players' names are still updated
         ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
             val player = handler.getPlayer()
-            val team = LifelineTeamManager.getPlayerTeam(player)
+            val team = LifelineTeamManager.getPlayerTeam(player) ?: return@register
 
-            if (team == null) {
-                return@register
+            if (team.lives <= 0) {
+                player.changeGameMode(GameMode.SPECTATOR)
+                player.sendMessage(Text.literal("[!] Your team has lost all of their lives, and as a result you're unable to continue playing."))
             }
         }
 
