@@ -48,7 +48,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
             Yaml.default.decodeFromString(LifelineServerConfig.serializer(), configText)
         }
 
-        ServerPlayConnectionEvents.INIT.register { handler, server ->
+        ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
             ServerPlayNetworking.send(handler.getPlayer(), Identifier("lifelinesmp", "initialize"), PacketByteBufs.empty())
 
             ServerPlayNetworking.registerReceiver(handler, Identifier("lifelinesmp", "stream_integration"))
