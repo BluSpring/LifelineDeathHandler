@@ -8,6 +8,7 @@ sealed class TwitchViewerAssistanceInfo {
     abstract val type: ViewerAssistanceTypes
     abstract val tiers: List<TwitchSubscriptionTiers>
 
+    @SerialName("LIFE_ADD_EVERY")
     @kotlinx.serialization.Serializable
     data class LifeAddEveryAssistanceData(
         override val tiers: List<TwitchSubscriptionTiers>,
@@ -16,6 +17,7 @@ sealed class TwitchViewerAssistanceInfo {
         override val type: ViewerAssistanceTypes = ViewerAssistanceTypes.LIFE_ADD_EVERY
     ) : TwitchViewerAssistanceInfo()
 
+    @SerialName("ITEM_GIVE")
     @kotlinx.serialization.Serializable
     data class ItemGiveAssistanceData(
         override val tiers: List<TwitchSubscriptionTiers>,
