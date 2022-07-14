@@ -11,7 +11,6 @@ sealed class ViewerAssistanceInfo {
     @SerialName("LIFE_ADD_EVERY")
     @kotlinx.serialization.Serializable
     data class LifeAddEveryAssistanceData(
-        val tiers: List<TwitchSubscriptionTiers>,
         override val per: Int,
         val add: Int,
         override val type: ViewerAssistanceTypes = ViewerAssistanceTypes.LIFE_ADD_EVERY
@@ -20,7 +19,6 @@ sealed class ViewerAssistanceInfo {
     @SerialName("ITEM_GIVE")
     @kotlinx.serialization.Serializable
     data class ItemGiveAssistanceData(
-        val tiers: List<TwitchSubscriptionTiers>,
         override val per: Int,
         val id: String,
         val count: Int,
