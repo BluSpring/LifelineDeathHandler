@@ -19,6 +19,6 @@ class LifelineDeathHandler : ModInitializer {
             return JsonParser.parseString(json.toString()).asJsonObject
         }
 
-        const val TESTING = true
+        const val TESTING = false
     }
 }

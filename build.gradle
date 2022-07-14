@@ -3,6 +3,7 @@ plugins {
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version '1.7.0'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 version = project.mod_version
@@ -71,8 +72,8 @@ dependencies {
     }
 
     modApi "com.terraformersmc:modmenu:4.0.3"
-    include(implementation("com.charleskorn.kaml:kaml:0.45.0"))
-    include(implementation("io.socket:socket.io-client:1.0.0"))
+    shadow ("com.charleskorn.kaml:kaml:0.46.0")
+    shadow ("io.socket:socket.io-client:1.0.0")
 
     modRuntimeOnly "curse.maven:ferritecore-fabric-459857:3824694"
     modRuntimeOnly "maven.modrinth:lazydfu:0.1.3"
@@ -83,6 +84,26 @@ dependencies {
     // Added because otherwise Sodium physically will not function in testing.
     // I have no idea why.
     runtimeOnly 'org.joml:joml:1.10.4'
+}
+
+shadowJar {
+    mergeServiceFiles()
+
+    archiveClassifier.set("shadow")
+    configurations = [project.configurations.shadow]
+
+    // need to do this because it won't exclude for some fucking reason
+    relocate "kotlinx", "shadow.bluspring.lifelinesmp.kotlinx"
+    relocate "kotlin", "shadow.bluspring.lifelinesmp.kotlin"
+    relocate "org.jetbrains", "shadow.bluspring.lifelinesmp.jetbrains"
+    relocate "org.intellij", "shadow.bluspring.lifelinesmp.intellij"
+    relocate "org.snakeyaml", "shadow.bluspring.lifelinesmp.snakeyaml"
+    relocate "com.charleskorn", "shadow.bluspring.lifelinesmp.charleskorn"
+    relocate "io.socket", "shadow.bluspring.lifelinesmp.io.socket"
+}
+
+remapJar {
+    inputFile = shadowJar.archiveFile.get()
 }
 
 processResources {
@@ -139,4 +160,9 @@ publishing {
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
     }
+}
+
+compileKotlin {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
