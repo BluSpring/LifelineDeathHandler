@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.command.argument.TextArgumentType
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.HoverEvent
@@ -78,11 +77,8 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
             val team = LifelineTeamManager.getPlayerTeam(player)
 
             if (team == null) {
-                player.customName = null
                 return@register
             }
-
-            player.customName = player.name.copy().setStyle(team.name.style)
         }
 
         ServerPlayConnectionEvents.DISCONNECT.register { handler, _ ->
@@ -167,6 +163,10 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                 )
                                                 LifelineTeamManager.save()
 
+                                                val scoreboardTeam = it.source.server.scoreboard.addTeam("lf_$id")
+                                                scoreboardTeam.displayName = name
+                                                scoreboardTeam.color = Formatting.byName(name.style.color?.name ?: "WHITE")
+
                                                 updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
 
                                                 it.source.sendFeedback(Text.literal("Successfully created team ").append(name), false)
@@ -199,11 +199,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
 
                                                 val team = LifelineTeamManager.teams[id]!!
 
-                                                it.source.server.playerManager.playerList.forEach { player ->
-                                                    if (LifelineTeamManager.getPlayerTeam(player) == team) {
-                                                        player.customName = null
-                                                    }
-                                                }
+                                                it.source.server.scoreboard.removeTeam(it.source.server.scoreboard.getTeam("lf_$id"))
 
                                                 LifelineTeamManager.teams.remove(id)
                                                 LifelineTeamManager.save()
@@ -241,14 +237,12 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                         val team = LifelineTeamManager.teams[id]!!
                                                         val oldName = team.name
 
-                                                        it.source.server.playerManager.playerList.forEach { player ->
-                                                            if (LifelineTeamManager.getPlayerTeam(player) == team) {
-                                                                player.customName = player.name.copy().setStyle(text.style)
-                                                            }
-                                                        }
-
                                                         team.name = text
                                                         LifelineTeamManager.save()
+
+                                                        val scoreboardTeam = it.source.server.scoreboard.getTeam("lf_$id") ?: it.source.server.scoreboard.addTeam("lf_$id")
+                                                        scoreboardTeam.color = Formatting.byName(text.style.color?.name ?: "WHITE")
+                                                        scoreboardTeam.displayName = text
 
                                                         updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
 
@@ -309,6 +303,11 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             ))
                                                             LifelineTeamManager.save()
 
+                                                            val scoreboardTeam = it.source.server.scoreboard.getTeam("lf_$id") ?: it.source.server.scoreboard.addTeam("lf_$id")
+                                                            scoreboardTeam.color = Formatting.byName(team.name.style.color?.name ?: "WHITE")
+                                                            scoreboardTeam.displayName = team.name
+
+                                                            it.source.server.scoreboard.addPlayerToTeam(player.gameProfile.name, scoreboardTeam)
                                                             updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
 
                                                             it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been successfully added to team ").append(team.name), false)
@@ -346,6 +345,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                                 return@executes 1
                                                             }
 
+                                                            it.source.server.scoreboard.clearPlayerTeam(player.gameProfile.name)
                                                             team.players.removeIf { pl -> pl.uuid == player.uuid }
                                                             LifelineTeamManager.save()
 

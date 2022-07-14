@@ -18,13 +18,13 @@ abstract class StreamIntegration(val player: ServerPlayerEntity, val apiKey: Str
     var authorized = false
 
     open fun start() {
-        logger.info("Starting ${integrationType.integrationName} Stream Integration for player ${player.name}.")
+        logger.info("Starting ${integrationType.integrationName} Stream Integration for player ${player.name.string}.")
         socket = createSocket()
         socket.connect()
     }
 
     open fun stop() {
-        logger.info("Stopping ${integrationType.integrationName} Stream Integration for player ${player.name}.")
+        logger.info("Stopping ${integrationType.integrationName} Stream Integration for player ${player.name.string}.")
         socket.close()
     }
 

@@ -16,7 +16,7 @@ class WarningHud(private val client: MinecraftClient) : DrawableHelper() {
             if (config.apiKey.isBlank()) {
                 this.client.textRenderer.drawWithShadow(
                     matrices,
-                    "Your ${config.type.name} is not currently set up!",
+                    "Your ${config.type.integrationName} is not currently set up!",
                     0F,
                     0F,
                     16777215
