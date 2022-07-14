@@ -56,16 +56,39 @@ class StreamElementsStreamIntegration(player: ServerPlayerEntity, apiKey: String
             return
         }
 
-        val type = event.get("type").asString
-        val provider = event.get("provider").asString
-
-        val data = event.getAsJsonObject("data")
+        val type = event.get("listener").asString
+        val data = event.getAsJsonObject("event")
 
         when (type) {
-            "subscriber" -> {
-                StreamIntegrationManager.handleTwitchSubscription(
+            "subscriber-latest" -> {
+                if (data.get("gifted").asBoolean) {
+                    StreamIntegrationManager.handleTwitchGiftedSubscription(
+                        player,
+                        TwitchSubscriptionTiers.values().first { it.id == data.get("tier").asString },
+                        data.get("sender").asString,
+                        1
+                    )
+                } else if (data.get("bulkGifted").asBoolean) {
+                    StreamIntegrationManager.handleTwitchGiftedSubscription(
+                        player,
+                        TwitchSubscriptionTiers.values().first { it.id == data.get("tier").asString },
+                        data.get("sender").asString,
+                        data.get("amount").asInt
+                    )
+                } else {
+                    StreamIntegrationManager.handleTwitchSubscription(
+                        player,
+                        TwitchSubscriptionTiers.values().first { it.id == data.get("tier").asString },
+                        data.get("name").asString
+                    )
+                }
+            }
+
+            "cheer-latest" -> {
+                StreamIntegrationManager.handleTwitchCheer(
                     player,
-                    TwitchSubscriptionTiers.values().first { it.id == data.get("tier").asString }
+                    data.get("name").asString,
+                    data.get("amount").asInt
                 )
             }
 
