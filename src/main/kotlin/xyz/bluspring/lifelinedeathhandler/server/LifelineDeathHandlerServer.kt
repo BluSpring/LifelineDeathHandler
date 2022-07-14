@@ -44,9 +44,14 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                     val integrationType = StreamIntegrationType.valueOf(buf.readString())
                     val apiKey = buf.readString()
 
+                    if (integrationType == StreamIntegrationType.STREAMLABS) {
+                        handler.disconnect(Text.of("LifelineDeathHandler: You're currently using an unsupported stream integration type! (${integrationType.integrationName})"))
+                        return@registerReceiver
+                    }
+
                     StreamIntegrationManager.registerIntegration(player, twitchUsername, integrationType, apiKey)
                 } catch (e: Exception) {
-                    handler.disconnect(Text.of("LifelineDeathHandler Error whilst parsing stream integration: $e"))
+                    handler.disconnect(Text.of("LifelineDeathHandler: Error whilst parsing stream integration: $e"))
                 }
             }
         }

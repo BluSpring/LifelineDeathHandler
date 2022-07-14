@@ -49,14 +49,14 @@ class LifelineModMenuIntegration : ModMenuApi {
                     integrationEntryBuilder.startEnumSelector(
                         Text.of("Stream Integration Type"),
                         StreamIntegrationType::class.java,
-                        config.type
+                        StreamIntegrationType.STREAMELEMENTS
                     ).apply {
                         defaultValue = Supplier {
                             StreamIntegrationType.STREAMELEMENTS
                         }
 
                         setSaveConsumer {
-                            config.type = it
+                            config.type = StreamIntegrationType.STREAMELEMENTS
                         }
                     }.build()
                 )

@@ -11,6 +11,10 @@ class StreamlabsStreamIntegration(player: ServerPlayerEntity, apiKey: String, tw
     override val integrationType = StreamIntegrationType.STREAMLABS
     override val logger: Logger = LoggerFactory.getLogger("${integrationType.integrationName}: $twitchUsername")
 
+    override fun start() {
+        logger.error("${player.name} tried running Streamlabs' Stream Integration, but it is currently disabled!")
+    }
+
     override fun generateOptions(): IO.Options {
         return super.generateOptions().apply {
             query = "token=$apiKey"
