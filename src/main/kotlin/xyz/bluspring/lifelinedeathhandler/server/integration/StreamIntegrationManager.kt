@@ -29,6 +29,11 @@ object StreamIntegrationManager {
         integrations[player]!!.start()
     }
 
+    fun unregisterIntegration(player: ServerPlayerEntity) {
+        integrations[player]?.stop()
+        integrations.remove(player)
+    }
+
     fun handleTwitchSubscription(player: ServerPlayerEntity, tier: TwitchSubscriptionTiers, actor: String) {
         if (!viewerAssistance.twitchSubscription.enabled)
             return

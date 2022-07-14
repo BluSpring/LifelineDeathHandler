@@ -7,7 +7,7 @@ import xyz.bluspring.lifelinedeathhandler.util.ColorHelper
 
 data class LifelineTeam(
     var lives: Int,
-    val name: Text,
+    var name: Text,
     val players: MutableList<LifelinePlayer>
 ) {
     companion object {
