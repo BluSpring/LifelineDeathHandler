@@ -75,6 +75,12 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
             val player = handler.getPlayer()
             val team = LifelineTeamManager.getPlayerTeam(player) ?: return@register
 
+            val scoreboardTeam = player.server.scoreboard.getTeam("lf_${LifelineTeamManager.teams.keys.find { key -> LifelineTeamManager.teams[key] == team }}")
+
+            if (scoreboardTeam != null) {
+                handler.player.server.scoreboard.addPlayerToTeam(player.entityName, scoreboardTeam)
+            }
+
             if (team.lives <= 0) {
                 player.changeGameMode(GameMode.SPECTATOR)
                 player.sendMessage(Text.literal("[!] Your team has lost all of their lives, and as a result you're unable to continue playing."))
