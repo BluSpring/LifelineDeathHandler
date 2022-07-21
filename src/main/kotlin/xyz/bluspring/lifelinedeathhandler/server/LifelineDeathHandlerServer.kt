@@ -166,6 +166,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                 val scoreboardTeam = it.source.server.scoreboard.addTeam("lf_$id")
                                                 scoreboardTeam.displayName = name
                                                 scoreboardTeam.color = Formatting.byName(name.style.color?.name ?: "WHITE")
+                                                scoreboardTeam.prefix = name.copy().formatted(Formatting.BOLD).append(Text.literal(" "))
 
                                                 updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
 
@@ -243,6 +244,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                         val scoreboardTeam = it.source.server.scoreboard.getTeam("lf_$id") ?: it.source.server.scoreboard.addTeam("lf_$id")
                                                         scoreboardTeam.color = Formatting.byName(text.style.color?.name ?: "WHITE")
                                                         scoreboardTeam.displayName = text
+                                                        scoreboardTeam.prefix = team.name.copy().formatted(Formatting.BOLD).append(Text.literal(" "))
 
                                                         updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
 
@@ -306,6 +308,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             val scoreboardTeam = it.source.server.scoreboard.getTeam("lf_$id") ?: it.source.server.scoreboard.addTeam("lf_$id")
                                                             scoreboardTeam.color = Formatting.byName(team.name.style.color?.name ?: "WHITE")
                                                             scoreboardTeam.displayName = team.name
+                                                            scoreboardTeam.prefix = team.name.copy().formatted(Formatting.BOLD).append(Text.literal(" "))
 
                                                             it.source.server.scoreboard.addPlayerToTeam(player.gameProfile.name, scoreboardTeam)
                                                             updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
@@ -367,7 +370,17 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
             LifelineTeamManager.load()
         }
 
-        ServerLifecycleEvents.SERVER_STOPPED.register {
+        ServerLifecycleEvents.SERVER_STARTED.register {
+            LifelineTeamManager.teams.forEach { (id, team) ->
+                val scoreboardTeam = it.scoreboard.getTeam("lf_$id") ?: it.scoreboard.addTeam("lf_$id")
+
+                scoreboardTeam.displayName = team.name
+                scoreboardTeam.prefix = team.name.copy().formatted(Formatting.BOLD).append(Text.literal(" "))
+                scoreboardTeam.color = Formatting.byName(team.name.style.color?.name ?: "WHITE")
+            }
+        }
+
+        ServerLifecycleEvents.SERVER_STOPPING.register {
             LifelineTeamManager.stop()
         }
     }
