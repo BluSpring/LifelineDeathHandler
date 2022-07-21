@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.damage.DamageTracker
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableTextContent
@@ -37,7 +38,12 @@ object LifelineMixinHandler {
 
     fun handlePostDeathMessages(player: ServerPlayerEntity, source: DamageSource) {
         val team = getPlayerTeam(player) ?: return
+
+        if (source.attacker != null && source.attacker!!.type == EntityType.PLAYER && getPlayerTeam(source.attacker!! as ServerPlayerEntity) == team)
+            return
+
         team.lives -= 1
+
         player.server.playerManager.playerList.filter { getPlayerTeam(it) == team }.forEach {
             it.sendMessage(
                 Text.literal("[!] Your team has lost a life!")
@@ -67,8 +73,8 @@ object LifelineMixinHandler {
                         )
                 )
 
-                it.playSound(SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, .6F, 1F)
-                it.playSound(SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, .4F, 1F)
+                it.world.playSound(it, it.blockPos, SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.PLAYERS, .6F, 1F)
+                it.world.playSound(it, it.blockPos, SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.PLAYERS, .4F, 1F)
             }
         }
 
