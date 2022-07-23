@@ -1,6 +1,8 @@
 package xyz.bluspring.lifelinedeathhandler.server.integration
 
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -10,7 +12,7 @@ import java.util.*
 
 class StreamElementsStreamIntegration(player: ServerPlayerEntity, apiKey: String, twitchUsername: String) : StreamIntegration(player, apiKey, twitchUsername) {
     override val integrationType = StreamIntegrationType.STREAMELEMENTS
-    override val logger: Logger = LoggerFactory.getLogger("${integrationType.integrationName}: $twitchUsername")
+    override val logger: Logger = LoggerFactory.getLogger("${integrationType.integrationName}: ${player.entityName}")
 
     override fun onConnect(vararg args: Any) {
         logger.info("Connected to StreamElements' Socket API. Attempting authentication.")
@@ -30,6 +32,8 @@ class StreamElementsStreamIntegration(player: ServerPlayerEntity, apiKey: String
                 if (!authorized) {
                     logger.warn("Not authorized to connect to StreamElements' Socket API!")
 
+                    player.sendMessage(Text.literal("Failed to connect to StreamElements!").formatted(Formatting.RED))
+
                     stop()
                     sendInvalidIntegrationError()
                 }
@@ -39,6 +43,9 @@ class StreamElementsStreamIntegration(player: ServerPlayerEntity, apiKey: String
         socket.on("authenticated") {
             logger.info("Successfully authenticated with the StreamElements Socket API!")
             authorized = true
+
+            player.sendMessage(Text.literal("Successfully connected to StreamElements!"))
+            player.sendMessage(Text.literal("If you are still able to see an error message, please restart the game!"))
 
             timer.cancel()
         }
