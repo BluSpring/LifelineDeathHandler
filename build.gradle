@@ -102,6 +102,10 @@ shadowJar {
     relocate "io.socket", "shadow.bluspring.lifelinesmp.io.socket"
 }
 
+prepareRemapJar {
+    dependsOn(shadowJar)
+}
+
 remapJar {
     inputFile = shadowJar.archiveFile.get()
 }
