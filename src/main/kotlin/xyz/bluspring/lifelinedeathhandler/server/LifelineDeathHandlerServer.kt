@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.command.argument.EntityArgumentType
+import net.minecraft.command.argument.GameProfileArgumentType
 import net.minecraft.command.argument.TextArgumentType
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.network.ServerPlayerEntity
@@ -284,10 +285,17 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             }
                                                         }.buildFuture()
                                                     }
-                                                    .then(CommandManager.argument("player", EntityArgumentType.player())
+                                                    .then(CommandManager.argument("player", GameProfileArgumentType.gameProfile())
                                                         .executes {
                                                             val id = StringArgumentType.getString(it, "id")
-                                                            val player = EntityArgumentType.getPlayer(it, "player")
+                                                            val players = GameProfileArgumentType.getProfileArgument(it, "player")
+
+                                                            if (players.isEmpty()) {
+                                                                it.source.sendError(Text.literal("No players exist by that name!").formatted(Formatting.RED))
+                                                                return@executes 1
+                                                            }
+
+                                                            val player = players.first()
 
                                                             if (!LifelineTeamManager.teams.contains(id)) {
                                                                 it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
@@ -295,7 +303,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             }
 
                                                             val team = LifelineTeamManager.teams[id]!!
-                                                            if (team.players.any { pl -> pl.uuid == player.uuid }) {
+                                                            if (team.players.any { pl -> pl.uuid == player.id }) {
                                                                 it.source.sendError(Text.literal("Player is already in team!").formatted(Formatting.RED))
                                                                 return@executes 1
                                                             }
@@ -303,13 +311,13 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             val originalTeam = LifelineTeamManager.getPlayerTeam(player)
 
                                                             if (originalTeam != null) {
-                                                                originalTeam.players.removeIf { pl -> pl.uuid == player.uuid }
+                                                                originalTeam.players.removeIf { pl -> pl.uuid == player.id }
                                                                 it.source.sendFeedback(Text.literal("Player was removed from their original team ").append(originalTeam.name).append(Text.literal(" to join this team.")), false)
                                                             }
 
                                                             team.players.add(LifelinePlayer(
-                                                                player.gameProfile.name,
-                                                                player.gameProfile.id
+                                                                player.name,
+                                                                player.id
                                                             ))
                                                             LifelineTeamManager.save()
 
@@ -318,10 +326,10 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             scoreboardTeam.displayName = team.name
                                                             scoreboardTeam.prefix = team.name.copy().formatted(Formatting.BOLD).append(Text.literal(" "))
 
-                                                            it.source.server.scoreboard.addPlayerToTeam(player.gameProfile.name, scoreboardTeam)
+                                                            it.source.server.scoreboard.addPlayerToTeam(player.name, scoreboardTeam)
                                                             updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
 
-                                                            it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been successfully added to team ").append(team.name), false)
+                                                            it.source.sendFeedback(Text.literal("${player.name} has been successfully added to team ").append(team.name), false)
 
                                                             1
                                                         })
@@ -340,10 +348,17 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             }
                                                         }.buildFuture()
                                                     }
-                                                    .then(CommandManager.argument("player", EntityArgumentType.player())
+                                                    .then(CommandManager.argument("player", GameProfileArgumentType.gameProfile())
                                                         .executes {
-                                                            val id = it.getArgument("id", String::class.java)
-                                                            val player = EntityArgumentType.getPlayer(it, "player")
+                                                            val id = StringArgumentType.getString(it, "id")
+                                                            val players = GameProfileArgumentType.getProfileArgument(it, "player")
+
+                                                            if (players.isEmpty()) {
+                                                                it.source.sendError(Text.literal("No players exist by that name!").formatted(Formatting.RED))
+                                                                return@executes 1
+                                                            }
+
+                                                            val player = players.first()
 
                                                             if (!LifelineTeamManager.teams.contains(id)) {
                                                                 it.source.sendError(Text.literal("Team $id does not exist!").formatted(Formatting.RED))
@@ -351,18 +366,18 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             }
 
                                                             val team = LifelineTeamManager.teams[id]!!
-                                                            if (!team.players.any { pl -> pl.uuid == player.uuid }) {
+                                                            if (!team.players.any { pl -> pl.uuid == player.id }) {
                                                                 it.source.sendError(Text.literal("Player is not in the team!").formatted(Formatting.RED))
                                                                 return@executes 1
                                                             }
 
-                                                            it.source.server.scoreboard.clearPlayerTeam(player.gameProfile.name)
-                                                            team.players.removeIf { pl -> pl.uuid == player.uuid }
+                                                            it.source.server.scoreboard.clearPlayerTeam(player.name)
+                                                            team.players.removeIf { pl -> pl.uuid == player.id }
                                                             LifelineTeamManager.save()
 
                                                             updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
 
-                                                            it.source.sendFeedback(Text.literal("${player.gameProfile.name} has been removed from team ").append(team.name), false)
+                                                            it.source.sendFeedback(Text.literal("${player.name} has been removed from team ").append(team.name), false)
 
                                                             1
                                                         }

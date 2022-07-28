@@ -72,8 +72,8 @@ dependencies {
     }
 
     modApi "com.terraformersmc:modmenu:4.0.3"
-    shadow ("com.charleskorn.kaml:kaml:0.46.0")
-    shadow ("io.socket:socket.io-client:1.0.0")
+    shadow(implementation("com.charleskorn.kaml:kaml:0.46.0"))
+    shadow(implementation("io.socket:socket.io-client:1.0.0"))
 
     modRuntimeOnly "curse.maven:ferritecore-fabric-459857:3824694"
     modRuntimeOnly "maven.modrinth:lazydfu:0.1.3"

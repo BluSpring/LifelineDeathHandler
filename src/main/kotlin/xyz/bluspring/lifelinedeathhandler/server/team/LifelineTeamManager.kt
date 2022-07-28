@@ -2,6 +2,7 @@ package xyz.bluspring.lifelinedeathhandler.server.team
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.mojang.authlib.GameProfile
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.server.network.ServerPlayerEntity
 import org.slf4j.Logger
@@ -50,6 +51,14 @@ object LifelineTeamManager {
         return teams.values.firstOrNull {
             it.players.any { lifelinePlayer ->
                 lifelinePlayer.uuid == player.uuid
+            }
+        }
+    }
+
+    fun getPlayerTeam(profile: GameProfile): LifelineTeam? {
+        return teams.values.firstOrNull {
+            it.players.any { lifelinePlayer ->
+                lifelinePlayer.uuid == profile.id
             }
         }
     }
