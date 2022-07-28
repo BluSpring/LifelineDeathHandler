@@ -14,10 +14,7 @@ object LifelineTeamManager {
     private val dataFile = File(FabricLoader.getInstance().gameDir.toFile(), "lifeline_teams.json")
     private val logger: Logger = LoggerFactory.getLogger(LifelineTeamManager::class.java)
 
-    fun stop() {
-        logger.info("Saving teams data..")
-        save()
-    }
+    fun stop() {}
 
     fun load() {
         if (!dataFile.exists())

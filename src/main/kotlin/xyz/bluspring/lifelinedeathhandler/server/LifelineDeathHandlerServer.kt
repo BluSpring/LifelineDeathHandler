@@ -128,8 +128,10 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                 Text.of(" - ")
                                             )
                                             .append(
-                                                if (StreamIntegrationManager.integrations.contains(player))
+                                                if (StreamIntegrationManager.integrations.contains(player) && StreamIntegrationManager.integrations[player]?.authorized == true)
                                                     Text.literal("LINKED").formatted(Formatting.GREEN)
+                                                else if (StreamIntegrationManager.integrations[player]?.authorized == false)
+                                                    Text.literal("UNAUTHORIZED").formatted(Formatting.YELLOW)
                                                 else
                                                     Text.literal("UNLINKED").formatted(Formatting.RED)
                                             )
