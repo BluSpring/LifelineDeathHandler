@@ -17,7 +17,7 @@ class LifelineModMenuIntegration : ModMenuApi {
         return ConfigScreenFactory {
             ConfigBuilder.create().apply {
                 parentScreen = it
-                title = Text.of("LifelineSMP Death Handler")
+                title = Text.of("RoyalSMP Death Handler")
 
                 val config = LifelineDeathHandlerClient.config
 
@@ -38,7 +38,7 @@ class LifelineModMenuIntegration : ModMenuApi {
                         defaultValue = Supplier { "" }
 
                         setSaveConsumer {
-                            config.apiKey = it.lowercase()
+                            config.twitchUsername = it.lowercase()
 
                             LifelineDeathHandlerClient.sendApiKey()
                         }

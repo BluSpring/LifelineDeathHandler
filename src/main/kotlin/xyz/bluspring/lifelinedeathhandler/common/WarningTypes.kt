@@ -1,4 +1,4 @@
-package xyz.bluspring.lifelinedeathhandler.client.gui
+package xyz.bluspring.lifelinedeathhandler.common
 
 enum class WarningTypes {
     NONE,

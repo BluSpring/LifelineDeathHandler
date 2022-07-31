@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory
 import xyz.bluspring.lifelinedeathhandler.client.config.LifelineClientConfig
 import xyz.bluspring.lifelinedeathhandler.client.gui.TeamLivesScreen
 import xyz.bluspring.lifelinedeathhandler.client.gui.WarningHud
-import xyz.bluspring.lifelinedeathhandler.client.gui.WarningTypes
+import xyz.bluspring.lifelinedeathhandler.common.WarningTypes
 import xyz.bluspring.lifelinedeathhandler.team.LifelineTeam
 import xyz.bluspring.lifelinedeathhandler.team.LifelinePlayer
 import java.io.File
@@ -49,9 +49,9 @@ class LifelineDeathHandlerClient : ClientModInitializer {
             isEnabled = true
 
             ClientPlayNetworking.registerReceiver(
-                Identifier("lifelinesmp", "integration_invalid")
-            ) { _, _, _, _ ->
-                WarningHud.warningType = WarningTypes.INVALID_API_KEY
+                Identifier("lifelinesmp", "warning_type")
+            ) { _, _, buf, _ ->
+                WarningHud.warningType = buf.readEnumConstant(WarningTypes::class.java)
             }
 
             ClientPlayNetworking.registerReceiver(
@@ -95,6 +95,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
             isEnabled = false
 
             teams.clear()
+            WarningHud.warningType = WarningTypes.NONE
         }
 
         // testing purposes
@@ -164,7 +165,7 @@ class LifelineDeathHandlerClient : ClientModInitializer {
             KeyBinding(
                 "key.lifelinesmp.teamList",
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_Z,
+                GLFW.GLFW_KEY_RIGHT_ALT,
                 "category.lifelinesmp"
             )
         )

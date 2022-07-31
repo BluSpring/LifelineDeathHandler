@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.util.math.MatrixStack
 import xyz.bluspring.lifelinedeathhandler.client.LifelineDeathHandlerClient
+import xyz.bluspring.lifelinedeathhandler.common.WarningTypes
 
 class WarningHud(private val client: MinecraftClient) : DrawableHelper() {
     fun render(matrices: MatrixStack) {

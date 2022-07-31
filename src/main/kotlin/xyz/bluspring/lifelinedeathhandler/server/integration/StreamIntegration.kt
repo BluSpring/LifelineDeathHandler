@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier
 import org.slf4j.Logger
 import xyz.bluspring.lifelinedeathhandler.LifelineDeathHandler
 import xyz.bluspring.lifelinedeathhandler.common.StreamIntegrationType
+import xyz.bluspring.lifelinedeathhandler.common.WarningTypes
 
 abstract class StreamIntegration(val player: ServerPlayerEntity, val apiKey: String, val twitchUsername: String) {
     abstract val integrationType: StreamIntegrationType
@@ -71,7 +72,10 @@ abstract class StreamIntegration(val player: ServerPlayerEntity, val apiKey: Str
     protected abstract fun onEvent(vararg args: Any)
 
     protected fun sendInvalidIntegrationError() {
-        //ServerPlayNetworking.send(player, Identifier("lifelinesmp", "integration_invalid"), PacketByteBufs.empty())
+        ServerPlayNetworking.send(player, Identifier("lifelinesmp", "warning_type"), PacketByteBufs.create().apply {
+            writeEnumConstant(WarningTypes.INVALID_API_KEY)
+        })
+
         player.sendMessage(
             Text.literal("Your ${integrationType.integrationName} failed to connect due to an invalid API key, please fix it!").formatted(
             Formatting.RED))

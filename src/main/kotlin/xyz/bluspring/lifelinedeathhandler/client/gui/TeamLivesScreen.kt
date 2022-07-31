@@ -20,7 +20,7 @@ import xyz.bluspring.lifelinedeathhandler.client.gui.spruceui.SpruceScrollableCo
 import xyz.bluspring.lifelinedeathhandler.team.LifelineTeam
 
 
-class TeamLivesScreen(private val parent: Screen? = null) : SpruceScreen(Text.of("LifelineSMP Teams")) {
+class TeamLivesScreen(private val parent: Screen? = null) : SpruceScreen(Text.of("RoyalSMP Teams")) {
     override fun init() {
         super.init()
 

@@ -1,13 +1,17 @@
 package xyz.bluspring.lifelinedeathhandler.server.integration
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.minecraft.util.Identifier
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.bluspring.lifelinedeathhandler.LifelineDeathHandler
 import xyz.bluspring.lifelinedeathhandler.common.StreamIntegrationType
+import xyz.bluspring.lifelinedeathhandler.common.WarningTypes
 import java.util.*
 
 class StreamElementsStreamIntegration(player: ServerPlayerEntity, apiKey: String, twitchUsername: String) : StreamIntegration(player, apiKey, twitchUsername) {
@@ -44,8 +48,11 @@ class StreamElementsStreamIntegration(player: ServerPlayerEntity, apiKey: String
             logger.info("Successfully authenticated with the StreamElements Socket API!")
             authorized = true
 
-            player.sendMessage(Text.literal("Successfully connected to StreamElements!"))
-            player.sendMessage(Text.literal("If you are still able to see an error message, please restart the game!"))
+            player.sendMessage(Text.literal("Successfully connected to StreamElements!").formatted(Formatting.GREEN))
+
+            ServerPlayNetworking.send(player, Identifier("lifelinesmp", "warning_type"), PacketByteBufs.create().apply {
+                writeEnumConstant(WarningTypes.NONE)
+            })
 
             timer.cancel()
         }

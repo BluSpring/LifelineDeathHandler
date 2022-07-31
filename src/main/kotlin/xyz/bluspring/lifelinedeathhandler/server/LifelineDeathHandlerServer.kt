@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.command.argument.GameProfileArgumentType
 import net.minecraft.command.argument.TextArgumentType
 import net.minecraft.server.command.CommandManager
@@ -24,6 +23,7 @@ import net.minecraft.world.GameMode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.bluspring.lifelinedeathhandler.common.StreamIntegrationType
+import xyz.bluspring.lifelinedeathhandler.common.WarningTypes
 import xyz.bluspring.lifelinedeathhandler.server.config.LifelineServerConfig
 import xyz.bluspring.lifelinedeathhandler.server.integration.StreamIntegrationManager
 import xyz.bluspring.lifelinedeathhandler.server.team.LifelineTeamManager
@@ -59,6 +59,14 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                     val twitchUsername = buf.readString()
                     val integrationType = StreamIntegrationType.valueOf(buf.readString())
                     val apiKey = buf.readString()
+
+                    if (twitchUsername.isBlank()) {
+                        ServerPlayNetworking.send(player, Identifier("lifelinesmp", "warning_type"), PacketByteBufs.create().apply {
+                            writeEnumConstant(WarningTypes.INVALID_API_KEY)
+                        })
+
+                        return@registerReceiver
+                    }
 
                     if (integrationType == StreamIntegrationType.STREAMLABS) {
                         handler.disconnect(Text.of("LifelineDeathHandler: You're currently using an unsupported stream integration type! (${integrationType.integrationName})"))
