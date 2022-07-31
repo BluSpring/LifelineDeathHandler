@@ -69,7 +69,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                     }
 
                     if (integrationType == StreamIntegrationType.STREAMLABS) {
-                        handler.disconnect(Text.of("LifelineDeathHandler: You're currently using an unsupported stream integration type! (${integrationType.integrationName})"))
+                        player.sendMessage(Text.literal("LifelineDeathHandler: You're currently using an unsupported stream integration type! (${integrationType.integrationName})").formatted(Formatting.RED))
                         return@registerReceiver
                     }
 
@@ -184,6 +184,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                 scoreboardTeam.displayName = name
                                                 scoreboardTeam.color = Formatting.byName(name.style.color?.name ?: "WHITE")
                                                 scoreboardTeam.prefix = name.copy().formatted(Formatting.BOLD).append(Text.literal(" "))
+                                                scoreboardTeam.isFriendlyFireAllowed = false
 
                                                 updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
 
@@ -262,6 +263,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                         scoreboardTeam.color = Formatting.byName(text.style.color?.name ?: "WHITE")
                                                         scoreboardTeam.displayName = text
                                                         scoreboardTeam.prefix = team.name.copy().formatted(Formatting.BOLD).append(Text.literal(" "))
+                                                        scoreboardTeam.isFriendlyFireAllowed = false
 
                                                         updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
 
@@ -333,6 +335,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                                                             scoreboardTeam.color = Formatting.byName(team.name.style.color?.name ?: "WHITE")
                                                             scoreboardTeam.displayName = team.name
                                                             scoreboardTeam.prefix = team.name.copy().formatted(Formatting.BOLD).append(Text.literal(" "))
+                                                            scoreboardTeam.isFriendlyFireAllowed = false
 
                                                             it.source.server.scoreboard.addPlayerToTeam(player.name, scoreboardTeam)
                                                             updateTeams(mapOf(id to LifelineTeamManager.teams[id]!!), it.source.server.playerManager.playerList)
@@ -408,6 +411,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                 scoreboardTeam.displayName = team.name
                 scoreboardTeam.prefix = team.name.copy().formatted(Formatting.BOLD).append(Text.literal(" "))
                 scoreboardTeam.color = Formatting.byName(team.name.style.color?.name ?: "WHITE")
+                scoreboardTeam.isFriendlyFireAllowed = false
             }
         }
 
