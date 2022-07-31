@@ -3,9 +3,9 @@
         {
             "type": "bitmap",
             "file": "lifelinedeathhandler:icons/live.png",
-            "ascent": 40,
+            "ascent": 7,
             "chars": [
-                "☠"
+                "⛆"
             ]
         }
     ]
