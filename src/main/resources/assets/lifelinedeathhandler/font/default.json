@@ -1,0 +1,12 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "minecraft:icons/live.png",
+            "ascent": 40,
+            "chars": [
+                "☠"
+            ]
+        }
+    ]
+}
