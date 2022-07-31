@@ -56,7 +56,7 @@ class LifelineModMenuIntegration : ModMenuApi {
                         }
 
                         setSaveConsumer {
-                            config.type = StreamIntegrationType.STREAMELEMENTS
+                            config.type = it
                         }
                     }.build()
                 )
