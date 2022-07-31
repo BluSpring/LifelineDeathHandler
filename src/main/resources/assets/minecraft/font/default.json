@@ -2,7 +2,7 @@
     "providers": [
         {
             "type": "bitmap",
-            "file": "minecraft:icons/live.png",
+            "file": "lifelinedeathhandler:icons/live.png",
             "ascent": 40,
             "chars": [
                 "☠"
