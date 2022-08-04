@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
+import org.apache.logging.log4j.LogManager
 import xyz.bluspring.lifelinedeathhandler.server.LifelineDeathHandlerServer
 import java.io.File
 import java.net.URI
@@ -16,13 +17,15 @@ import java.time.Instant
 import java.util.*
 
 class LiveManager(private val server: MinecraftServer) {
+    private val logger = LogManager.getLogger(LiveManager::class.java)
+
     private val streamChannels = mutableListOf<StreamChannel>()
     private val timer = Timer()
 
     private val twitchApiConfig = LifelineDeathHandlerServer.config.twitchApi
     private var accessToken: String = ""
 
-    private val tokenFile = File(FabricLoader.getInstance().gameDir.toFile(), "twitch_access_token.lifeline.json")
+    private val tokenFile = File(FabricLoader.getInstance().gameDir.toFile(), "twitch_access_token.lifeline.txt")
 
     fun addChannel(player: PlayerEntity, channel: String) {
         val streamChannel = streamChannels.firstOrNull { player.uuid == it.player && it.twitchChannel == channel }
@@ -39,6 +42,10 @@ class LiveManager(private val server: MinecraftServer) {
     init {
         if (!tokenFile.exists())
             updateAccessToken()
+        else {
+            accessToken = tokenFile.readText()
+            validateAccessToken()
+        }
 
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
@@ -49,6 +56,26 @@ class LiveManager(private val server: MinecraftServer) {
                 }
             }
         }, 0L, 30 * 1000)
+    }
+
+    private fun validateAccessToken() {
+        val client = HttpClient.newHttpClient()
+
+        val request = HttpRequest
+            .newBuilder()
+            .uri(URI("https://id.twitch.tv/oauth2/validate"))
+            .GET()
+            .headers("Authorization", "OAuth $accessToken")
+            .build()
+
+        val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+
+        if (response.statusCode() != 200) {
+            logger.info("Access token has been invalidated, updating.")
+            updateAccessToken()
+        } else {
+            logger.info("Continuing to use access token from previous session as it's still valid.")
+        }
     }
 
     private fun updateAccessToken() {
@@ -79,6 +106,11 @@ class LiveManager(private val server: MinecraftServer) {
 
         val json = JsonParser.parseString(response.body()).asJsonObject
         accessToken = json.get("access_token").asString
+        logger.info("New access token created.")
+
+        if (!tokenFile.exists())
+            tokenFile.createNewFile()
+        tokenFile.writeText(accessToken)
     }
 
     fun isLive(player: PlayerEntity): Boolean {
