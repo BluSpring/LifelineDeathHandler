@@ -26,6 +26,8 @@ import xyz.bluspring.lifelinedeathhandler.common.StreamIntegrationType
 import xyz.bluspring.lifelinedeathhandler.common.WarningTypes
 import xyz.bluspring.lifelinedeathhandler.server.config.LifelineServerConfig
 import xyz.bluspring.lifelinedeathhandler.server.integration.StreamIntegrationManager
+import xyz.bluspring.lifelinedeathhandler.server.integration.twitch.LiveManager
+import xyz.bluspring.lifelinedeathhandler.server.integration.twitch.StreamChannel
 import xyz.bluspring.lifelinedeathhandler.server.team.LifelineTeamManager
 import xyz.bluspring.lifelinedeathhandler.team.LifelinePlayer
 import xyz.bluspring.lifelinedeathhandler.team.LifelineTeam
@@ -74,6 +76,8 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
                     }
 
                     StreamIntegrationManager.registerIntegration(player, twitchUsername, integrationType, apiKey)
+
+                    liveManager.addChannel(player, twitchUsername)
                 } catch (e: Exception) {
                     handler.disconnect(Text.of("LifelineDeathHandler: Error whilst parsing stream integration: $e"))
                 }
@@ -402,6 +406,8 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTING.register {
             LifelineTeamManager.load()
+
+            liveManager = LiveManager(it)
         }
 
         ServerLifecycleEvents.SERVER_STARTED.register {
@@ -422,6 +428,7 @@ class LifelineDeathHandlerServer : DedicatedServerModInitializer {
 
     companion object {
         lateinit var config: LifelineServerConfig
+        lateinit var liveManager: LiveManager
 
         val configFile = File(FabricLoader.getInstance().configDir.toFile(), "lifeline_server_config.yml")
 

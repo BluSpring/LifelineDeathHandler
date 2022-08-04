@@ -1,14 +1,18 @@
 # The LifelineSMP's managing mod's config, for the server.
 # It's better to modify these via commands, as it will be updated entirely in real-time.
 
-default-lives: 50
+default-lives: 30
 max-group-size: 4
+
+twitch-api:
+  client-id:
+  client-secret:
 
 # EXCEPT FOR THIS,
 # THIS SHOULD BE EDITED IN CONFIG.
 viewer-assistance:
   twitch-subscription-gift:
-    enabled: true
+    enabled: false
     types:
       - !<LIFE_ADD_EVERY>
         type: LIFE_ADD_EVERY
@@ -20,14 +24,14 @@ viewer-assistance:
         per: 5
         add: 1
   twitch-cheer:
-    enabled: true
+    enabled: false
     types:
       - !<LIFE_ADD_EVERY>
         type: LIFE_ADD_EVERY
         per: 2500
         add: 1
   twitch-subscription:
-    enabled: true
+    enabled: false
     types:
       - !<ITEM_GIVE>
         tiers:

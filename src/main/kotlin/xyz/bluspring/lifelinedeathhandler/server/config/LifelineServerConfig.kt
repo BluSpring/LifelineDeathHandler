@@ -11,5 +11,8 @@ data class LifelineServerConfig(
     var maxGroupSize: Int = 4,
 
     @SerialName("viewer-assistance")
-    val viewerAssistance: ViewerAssistanceConfig
+    val viewerAssistance: ViewerAssistanceConfig,
+
+    @SerialName("twitch-api")
+    val twitchApi: TwitchApiConfig
 )
