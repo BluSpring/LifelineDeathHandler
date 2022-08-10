@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.bluspring.lifelinedeathhandler.server.LifelineMixinHandler;
 
 @Mixin(ServerPlayerEntity.class)
@@ -21,5 +22,10 @@ public class ServerPlayerEntityMixin {
     @Inject(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/damage/DamageTracker;getDeathMessage()Lnet/minecraft/text/Text;"), method = "onDeath")
     public void appendTextForTeamPlayers(DamageSource damageSource, CallbackInfo ci) {
         LifelineMixinHandler.INSTANCE.handlePostDeathMessages((ServerPlayerEntity) (Object) this, damageSource);
+    }
+
+    @Inject(at = @At("HEAD"), method = "getPlayerListName", cancellable = true)
+    public void getNameForPlayerList(CallbackInfoReturnable<Text> cir) {
+        cir.setReturnValue(((ServerPlayerEntity) (Object) this).getDisplayName());
     }
 }
