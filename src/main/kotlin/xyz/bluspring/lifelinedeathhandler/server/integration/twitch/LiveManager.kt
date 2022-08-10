@@ -119,8 +119,9 @@ class LiveManager(private val server: MinecraftServer) {
 
     fun check() {
         val channelsToCheck = mutableListOf<StreamChannel>()
+        val streamChannelsCopy = mutableListOf<StreamChannel>().also { it.addAll(streamChannels) }
 
-        streamChannels.forEach {
+        streamChannelsCopy.forEach {
             val player = server.playerManager.getPlayer(it.player)
             if (player == null) {
                 if (System.currentTimeMillis() - it.lastCheck >= 30 * 60 * 1000) {
